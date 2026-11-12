@@ -1,0 +1,2720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>California FFA — El Credo de la FFA Bilingual Simulator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ffaNavy: '#003366',
+            ffaNavyDark: '#002244',
+            ffaNavyLight: '#0A4A8A',
+            ffaGold: '#FFCC00',
+            ffaGoldDark: '#D9AD00',
+            ffaGoldSoft: '#FFF8DB'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F3F5F8;
+      color: #0F172A;
+    }
+    .en-sub {
+      transition: all 0.2s ease;
+    }
+    body.hide-en .en-sub {
+      display: none !important;
+    }
+    .creed-serif {
+      font-family: 'Merriweather', serif;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); opacity: 0.85; }
+      70% { transform: scale(1.18); opacity: 0; }
+      100% { transform: scale(1.18); opacity: 0; }
+    }
+    .judge-speaking-ring {
+      animation: pulseRing 1.4s infinite ease-out;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #FFFFFF !important; }
+      .print-shadow-none { box-shadow: none !important; border: 1px solid #CBD5E1 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION HEADER -->
+  <header class="bg-ffaNavy text-white shadow-lg border-b-4 border-ffaGold sticky top-0 z-40 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand / Emblem -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-ffaGold text-ffaNavy flex items-center justify-center font-extrabold text-lg shadow-inner shrink-0 border-2 border-white/30">
+          FFA
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight leading-tight">
+              California FFA — El Credo de la FFA
+            </h1>
+            <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-ffaGold text-ffaNavy">
+              Curricular Code 06/2024
+            </span>
+          </div>
+          <p class="text-xs text-blue-100 en-sub">
+            Bilingual Recitation &amp; 3-Judge Q&amp;A Practice Simulator
+          </p>
+        </div>
+      </div>
+
+      <!-- Header Action Controls -->
+      <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+        <!-- Bilingual Toggle Pill -->
+        <button id="toggleEnBtn" type="button" onclick="toggleEnglishHelper()"
+          class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-ffaNavyDark hover:bg-ffaNavyLight border border-ffaGold/60 text-white transition shadow-sm cursor-pointer"
+          title="Toggle English helper subtitles on or off">
+          <span class="inline-block w-2.5 h-2.5 rounded-full bg-ffaGold" id="enStatusDot"></span>
+          <span>ES / EN Ayuda: <strong id="enStatusLabel" class="text-ffaGold">ON</strong></span>
+        </button>
+
+        <!-- 30-Question Study Bank Button -->
+        <button type="button" onclick="openBankModal()"
+          class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-ffaGold hover:bg-ffaGoldDark text-ffaNavy transition shadow-sm cursor-pointer">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span>Banco de 30 Preguntas</span>
+          <span class="hidden md:inline font-normal text-ffaNavy/80 en-sub">/ 30-Question Bank</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Stage Stepper Bar -->
+    <div class="bg-ffaNavyDark/90 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 grid grid-cols-4 gap-2 text-xs">
+        <button type="button" onclick="navigateStage(1)" id="stepBtn1"
+          class="step-pill flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-lg font-semibold text-left transition bg-ffaGold text-ffaNavy">
+          <span class="w-5 h-5 rounded-full bg-ffaNavy text-ffaGold flex items-center justify-center text-[11px] font-bold shrink-0">1</span>
+          <div>
+            <div>Configuración</div>
+            <div class="text-[10px] opacity-80 en-sub">Contest Setup</div>
+          </div>
+        </button>
+        <button type="button" onclick="navigateStage(2)" id="stepBtn2"
+          class="step-pill flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-lg font-semibold text-left transition text-blue-200 hover:bg-white/10">
+          <span class="w-5 h-5 rounded-full bg-white/15 text-white flex items-center justify-center text-[11px] font-bold shrink-0">2</span>
+          <div>
+            <div>Recitación (4:00)</div>
+            <div class="text-[10px] opacity-80 en-sub">Creed Delivery</div>
+          </div>
+        </button>
+        <button type="button" onclick="navigateStage(3)" id="stepBtn3"
+          class="step-pill flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-lg font-semibold text-left transition text-blue-200 hover:bg-white/10">
+          <span class="w-5 h-5 rounded-full bg-white/15 text-white flex items-center justify-center text-[11px] font-bold shrink-0">3</span>
+          <div>
+            <div>Preguntas (5:00)</div>
+            <div class="text-[10px] opacity-80 en-sub">3-Judge Q&amp;A</div>
+          </div>
+        </button>
+        <button type="button" onclick="navigateStage(4)" id="stepBtn4"
+          class="step-pill flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-lg font-semibold text-left transition text-blue-200 hover:bg-white/10">
+          <span class="w-5 h-5 rounded-full bg-white/15 text-white flex items-center justify-center text-[11px] font-bold shrink-0">4</span>
+          <div>
+            <div>Boleta (100 Pts)</div>
+            <div class="text-[10px] opacity-80 en-sub">Rubric Scorecard</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NON-BLOCKING NOTIFICATION BANNER -->
+  <div id="toastBanner" class="hidden fixed bottom-5 right-5 z-50 max-w-md bg-ffaNavy text-white border-l-4 border-ffaGold px-4 py-3 rounded-xl shadow-2xl flex items-start gap-3">
+    <div class="text-ffaGold font-bold text-lg leading-none mt-0.5">!</div>
+    <div class="flex-1 text-sm">
+      <div id="toastTitle" class="font-bold">Aviso</div>
+      <div id="toastMsg" class="text-blue-100 text-xs mt-0.5"></div>
+    </div>
+    <button type="button" onclick="hideToast()" class="text-blue-200 hover:text-white text-sm font-bold px-1">✕</button>
+  </div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 1: CONTESTANT & ROUND SETUP (CONFIGURACIÓN DEL CONCURSANTE)     -->
+    <!-- ===================================================================== -->
+    <section id="stage1" class="space-y-6">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-7">
+        <div class="border-b border-slate-100 pb-4 mb-6 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-ffaNavy">
+              Paso 1: Configuración del Concursante y Ronda
+            </h2>
+            <p class="text-sm text-slate-600 font-medium en-sub mt-0.5">
+              Step 1: Contestant &amp; Round Setup — Configure your division, practice mode, and microphone before entering the contest room.
+            </p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-ffaGoldSoft text-ffaNavy text-xs font-bold border border-ffaGold">
+            CDE / LDE California FFA
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left Column: Contestant Info & Selectors -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Contestant Name & Speaker Number -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="sm:col-span-2">
+                <label for="contestantName" class="block text-sm font-bold text-slate-800">
+                  Nombre del Concursante
+                  <span class="block text-xs font-normal text-slate-500 en-sub">Contestant Full Name</span>
+                </label>
+                <input id="contestantName" type="text" placeholder="Ej. María Fernanda López"
+                  class="mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ffaNavy focus:border-ffaNavy" />
+              </div>
+              <div>
+                <label for="speakerNumber" class="block text-sm font-bold text-slate-800">
+                  Número de Orador
+                  <span class="block text-xs font-normal text-slate-500 en-sub">Speaker Draw #</span>
+                </label>
+                <input id="speakerNumber" type="number" min="1" max="50" value="1"
+                  class="mt-1.5 w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ffaNavy focus:border-ffaNavy" />
+              </div>
+            </div>
+
+            <!-- Division Selector -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-2">
+                División de Competencia
+                <span class="block text-xs font-normal text-slate-500 en-sub">Select Your California FFA Division</span>
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button type="button" id="divBlueBtn" onclick="selectDivision('blue')"
+                  class="div-card text-left p-4 rounded-xl border-2 border-ffaNavy bg-blue-50/70 transition cursor-pointer">
+                  <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-ffaNavy text-base">División Azul</span>
+                    <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-ffaNavy text-white">7.º – 9.º Grado</span>
+                  </div>
+                  <div class="text-xs font-semibold text-ffaNavyLight mt-1 en-sub">
+                    Blue Division (Grades 7–9)
+                  </div>
+                  <p class="text-xs text-slate-600 mt-1.5">
+                    Enfoque en fundamentos de la agricultura, valores de la FFA y experiencias iniciales de SAE.
+                    <span class="block text-slate-500 en-sub mt-0.5">Focuses on agricultural fundamentals, FFA values, and introductory SAE experiences.</span>
+                  </p>
+                </button>
+
+                <button type="button" id="divGoldBtn" onclick="selectDivision('gold')"
+                  class="div-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer">
+                  <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-slate-800 text-base">División Oro</span>
+                    <span class="px-2 py-0.5 text-[11px] font-bold rounded bg-ffaGold text-ffaNavy">10.º – 12.º Grado</span>
+                  </div>
+                  <div class="text-xs font-semibold text-amber-700 mt-1 en-sub">
+                    Gold Division (Grades 10–12)
+                  </div>
+                  <p class="text-xs text-slate-600 mt-1.5">
+                    Preguntas avanzadas sobre liderazgo, comercialización, economía agrícola y política pública.
+                    <span class="block text-slate-500 en-sub mt-0.5">Advanced questions on leadership, ag marketing, economics, and industry policy.</span>
+                  </p>
+                </button>
+              </div>
+            </div>
+
+            <!-- Practice Mode Selector -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-2">
+                Modo de Simulación
+                <span class="block text-xs font-normal text-slate-500 en-sub">Select Round Practice Mode</span>
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button type="button" id="modeFullBtn" onclick="selectPracticeMode('full')"
+                  class="mode-card text-left p-3.5 rounded-xl border-2 border-ffaNavy bg-blue-50/70 transition cursor-pointer">
+                  <div class="font-bold text-sm text-ffaNavy">Simulación Completa</div>
+                  <div class="text-[11px] font-semibold text-ffaNavyLight en-sub">Full Simulation</div>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Recitación (4:00) + 3 Preguntas (5:00)
+                    <span class="block text-slate-500 en-sub">4:00 Recitation + 3 Questions / 5:00 Q&amp;A</span>
+                  </p>
+                </button>
+
+                <button type="button" id="modeReciteBtn" onclick="selectPracticeMode('recite')"
+                  class="mode-card text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer">
+                  <div class="font-bold text-sm text-slate-800">Solo Recitación</div>
+                  <div class="text-[11px] font-semibold text-slate-500 en-sub">Recitation Only</div>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Cronómetro 4:00 y juez de precisión palabra por palabra
+                    <span class="block text-slate-500 en-sub">4:00 timer &amp; word-by-word accuracy judge</span>
+                  </p>
+                </button>
+
+                <button type="button" id="modeQaBtn" onclick="selectPracticeMode('qa')"
+                  class="mode-card text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer">
+                  <div class="font-bold text-sm text-slate-800">Solo Preguntas</div>
+                  <div class="text-[11px] font-semibold text-slate-500 en-sub">Q&amp;A Round Only</div>
+                  <p class="text-xs text-slate-600 mt-1">
+                    3 jueces en español con límite de 5:00 minutos
+                    <span class="block text-slate-500 en-sub">3 Spanish judges with 5:00 minute limit</span>
+                  </p>
+                </button>
+              </div>
+            </div>
+
+            <!-- Memory Mode Toggle -->
+            <div>
+              <label class="block text-sm font-bold text-slate-800 mb-2">
+                Visibilidad del Texto (Memoria vs. Práctica)
+                <span class="block text-xs font-normal text-slate-500 en-sub">Script Visibility (Official Memory Mode vs. Practice Mode)</span>
+              </label>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button type="button" id="memPracticeBtn" onclick="selectMemoryMode(false)"
+                  class="mem-card text-left p-3.5 rounded-xl border-2 border-ffaNavy bg-blue-50/70 transition cursor-pointer">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-sm text-ffaNavy">Modo Práctica (Con Texto)</span>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Guía</span>
+                  </div>
+                  <div class="text-xs font-semibold text-ffaNavyLight en-sub mt-0.5">Practice Mode (With Text)</div>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Muestra el texto oficial en español con opción de ver la traducción al inglés lado a lado.
+                    <span class="block text-slate-500 en-sub mt-0.5">Shows official Spanish script with toggleable side-by-side English meaning.</span>
+                  </p>
+                </button>
+
+                <button type="button" id="memOfficialBtn" onclick="selectMemoryMode(true)"
+                  class="mem-card text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-sm text-slate-800">Modo Oficial (De Memoria)</span>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800">Torneo</span>
+                  </div>
+                  <div class="text-xs font-semibold text-slate-500 en-sub mt-0.5">Official Memory Mode</div>
+                  <p class="text-xs text-slate-600 mt-1">
+                    Oculta El Credo durante la recitación. Solo permite el botón de Apuntador (pausa de 10 seg).
+                    <span class="block text-slate-500 en-sub mt-0.5">Hides Creed text during recitation; only allows the 10-second prompter helper.</span>
+                  </p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Hardware Check & Official Rules Summary -->
+          <div class="lg:col-span-5 space-y-5">
+            <!-- Audio & Microphone Hardware Test -->
+            <div class="bg-slate-50 rounded-2xl border border-slate-200 p-4 sm:p-5 space-y-4">
+              <div>
+                <h3 class="font-extrabold text-ffaNavy text-base flex items-center gap-2">
+                  <span>Prueba de Micrófono y Voz</span>
+                  <span class="text-xs font-semibold text-slate-500 en-sub">/ Audio &amp; Mic Check</span>
+                </h3>
+                <p class="text-xs text-slate-600 mt-0.5">
+                  Verifica que tu micrófono capture tu voz y escucha la voz en español de los jueces.
+                  <span class="block text-slate-500 en-sub">Verify your microphone input level and test the Spanish judge voice synthesizer.</span>
+                </p>
+              </div>
+
+              <!-- Live Volume Meter -->
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between text-xs font-semibold">
+                  <span class="text-slate-700">Nivel de Micrófono <span class="text-slate-400 en-sub">/ Mic Input Level</span></span>
+                  <span id="micStatusText" class="text-slate-500">Inactivo / Idle</span>
+                </div>
+                <div class="w-full h-3.5 bg-slate-200 rounded-full overflow-hidden p-0.5">
+                  <div id="micLevelBar" class="h-full w-0 bg-emerald-500 rounded-full transition-all duration-75"></div>
+                </div>
+              </div>
+
+              <!-- Hardware Action Buttons -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button type="button" id="testMicBtn" onclick="toggleMicTest()"
+                  class="px-3 py-2.5 rounded-xl bg-ffaNavy hover:bg-ffaNavyLight text-white text-xs font-bold transition flex flex-col items-center justify-center cursor-pointer">
+                  <span id="testMicBtnLabel">Probar Micrófono y Voz</span>
+                  <span class="text-[10px] text-blue-200 font-normal en-sub">Test Mic &amp; Spanish STT</span>
+                </button>
+                <button type="button" onclick="testSpanishJudgeVoice()"
+                  class="px-3 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-ffaNavy border border-ffaNavy text-xs font-bold transition flex flex-col items-center justify-center cursor-pointer">
+                  <span>Probar Voz del Juez</span>
+                  <span class="text-[10px] text-slate-500 font-normal en-sub">Test Judge TTS Voice</span>
+                </button>
+              </div>
+
+              <!-- Quick Spanish STT Test Output -->
+              <div id="micTestOutputBox" class="hidden bg-white rounded-xl border border-slate-200 p-2.5 text-xs">
+                <div class="font-bold text-slate-700">Reconocimiento en Español <span class="font-normal text-slate-400 en-sub">/ Live Spanish Transcript</span>:</div>
+                <p id="micTestTranscript" class="text-ffaNavy italic mt-1">Habla ahora en español (ej. "Creo en el futuro de la agricultura")...</p>
+              </div>
+            </div>
+
+            <!-- Official California FFA Rules Summary Card -->
+            <div class="bg-ffaGoldSoft/60 rounded-2xl border border-ffaGold p-4 sm:p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="font-extrabold text-ffaNavy text-sm sm:text-base">
+                  Reglas Oficiales — California FFA
+                </h3>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-ffaNavy text-ffaGold">Rev. 06/2024</span>
+              </div>
+              <p class="text-xs font-semibold text-ffaNavy/80 en-sub -mt-2">
+                Official California Association FFA Curricular Code Rules
+              </p>
+
+              <ul class="space-y-2.5 text-xs text-slate-800">
+                <li class="flex items-start gap-2">
+                  <span class="font-extrabold text-ffaNavy mt-0.5">1.</span>
+                  <div>
+                    <strong>Apertura y Cierre Exactos:</strong> Debe iniciar exactamente con <em>"El Credo de la FFA por E.M. Tiffany"</em> y terminar con <em>"...esta inspiradora tarea. Gracias"</em> (-2 pts por palabra extra, omitida, agregada o cambiada).
+                    <span class="block text-slate-600 en-sub mt-0.5">Exact Opening &amp; Closing: Must begin with "El Credo de la FFA por E.M. Tiffany" and end with "...esta inspiradora tarea. Gracias" (-2 pts deduction per extra, missed, added, or switched word).</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-extrabold text-ffaNavy mt-0.5">2.</span>
+                  <div>
+                    <strong>Límite de Recitación (4:00):</strong> Máximo 4 minutos para recitar El Credo (-1 punto por cada segundo excedido).
+                    <span class="block text-slate-600 en-sub mt-0.5">Recitation Time Limit (4:00): 4-minute presentation limit (-1 pt per second over).</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-extrabold text-ffaNavy mt-0.5">3.</span>
+                  <div>
+                    <strong>Ronda de Preguntas (5:00):</strong> 3 preguntas de una sola parte en español; máximo 5 minutos en total (-1 punto por segundo excedido).
+                    <span class="block text-slate-600 en-sub mt-0.5">Q&amp;A Round (5:00): 3 single-part questions asked in Spanish, 5-minute total Q&amp;A limit (-1 pt per second over).</span>
+                  </div>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-extrabold text-ffaNavy mt-0.5">4.</span>
+                  <div>
+                    <strong>Vestimenta Oficial de la FFA:</strong> Se requiere el uniforme oficial completo de la FFA durante toda la competencia.
+                    <span class="block text-slate-600 en-sub mt-0.5">Official FFA Dress Required: Full Official FFA Dress is mandatory for all contestants.</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Round CTA -->
+        <div class="mt-7 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+          <div class="text-xs text-slate-600">
+            <span class="font-bold text-ffaNavy">Configuración actual:</span>
+            <span id="setupSummaryText">División Azul • Simulación Completa • Modo Práctica</span>
+          </div>
+          <button type="button" onclick="startSimulation()"
+            class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-ffaNavy hover:bg-ffaNavyLight text-white font-extrabold text-sm sm:text-base shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+            <span>Comenzar Ronda Oficial</span>
+            <span class="text-ffaGold font-semibold text-xs en-sub">/ Start Official Round →</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 2: EL CREDO RECITATION STAGE (RECITACIÓN DE EL CREDO - 4:00)    -->
+    <!-- ===================================================================== -->
+    <section id="stage2" class="hidden space-y-6">
+      <!-- Top Control & Timer Strip -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-ffaNavy text-ffaGold text-xs font-bold">Etapa 2 / Stage 2</span>
+              <h2 class="text-lg sm:text-xl font-extrabold text-ffaNavy">Recitación de El Credo de la FFA</h2>
+            </div>
+            <p class="text-xs text-slate-600 en-sub mt-0.5">
+              Official Spanish Recitation — Speak clearly into your microphone. Timer tracks up to 4:00 (-1 pt/sec overtime).
+            </p>
+          </div>
+
+          <!-- Live 4:00 Timer Display -->
+          <div id="reciteTimerCard" class="flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-slate-900 text-white border-2 border-slate-700">
+            <div>
+              <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
+                Tiempo / Limit 4:00
+              </div>
+              <div id="reciteTimerDisplay" class="text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-ffaGold">
+                00:00
+              </div>
+            </div>
+            <div class="border-l border-slate-700 pl-3 text-xs">
+              <div id="reciteOvertimeBadge" class="font-bold text-emerald-400">En Tiempo / On Pace</div>
+              <div id="reciteDeductionPreview" class="text-slate-300 text-[11px]">Penalización: 0 pts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recitation Action Buttons -->
+        <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-3">
+          <button type="button" id="startReciteBtn" onclick="startRecitation()"
+            class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <span>▶ Iniciar Recitación y Micrófono</span>
+            <span class="text-emerald-100 text-xs font-normal en-sub">/ Start Reciting</span>
+          </button>
+
+          <button type="button" id="stopReciteBtn" onclick="stopRecitation()" disabled
+            class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <span>⏹ Detener y Calificar</span>
+            <span class="text-rose-100 text-xs font-normal en-sub">/ Finish &amp; Score</span>
+          </button>
+
+          <!-- 10-Second Prompter Button -->
+          <button type="button" id="prompterBtn" onclick="triggerPrompter()"
+            class="px-4 py-2.5 rounded-xl bg-ffaGold hover:bg-ffaGoldDark text-ffaNavy font-bold text-sm shadow-sm transition flex items-center gap-2 cursor-pointer">
+            <span>💡 Pedir Apuntador</span>
+            <span class="text-ffaNavy/80 text-xs font-normal en-sub">/ Request Prompt</span>
+          </button>
+
+          <button type="button" onclick="resetRecitation()"
+            class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition cursor-pointer ml-auto">
+            Reiniciar / Reset
+          </button>
+        </div>
+
+        <!-- 10-Second Pause Alert Banner -->
+        <div id="pauseAlertBanner" class="hidden mt-4 p-3.5 rounded-xl bg-amber-50 border-2 border-amber-400 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-full bg-amber-500 text-white font-extrabold flex items-center justify-center text-sm shrink-0">!</span>
+            <div class="text-xs">
+              <div class="font-extrabold text-amber-900">Pausa de 10 segundos detectada — ¿Necesitas al Apuntador?</div>
+              <div class="text-amber-800 en-sub">10-second speech pause detected — Click "Pedir Apuntador" to hear and see the next 4 words.</div>
+            </div>
+          </div>
+          <button type="button" onclick="triggerPrompter()"
+            class="px-3.5 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer">
+            Ver Siguientes 4 Palabras / Next 4 Words
+          </button>
+        </div>
+
+        <!-- Prompter Output Box -->
+        <div id="prompterOutputBox" class="hidden mt-3 p-3.5 rounded-xl bg-ffaNavy text-white flex items-center justify-between gap-3">
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-ffaGold font-bold">
+              Apuntador Oficial (Siguientes 4 Palabras) <span class="en-sub font-normal text-blue-200">/ Next 4 Words</span>
+            </div>
+            <div id="prompterWordsText" class="text-base sm:text-lg font-serif font-bold mt-0.5 text-white"></div>
+          </div>
+          <button type="button" onclick="document.getElementById('prompterOutputBox').classList.add('hidden')"
+            class="text-xs text-blue-200 hover:text-white px-2 py-1">Cerrar ✕</button>
+        </div>
+      </div>
+
+      <!-- Main Grid: Official Script Card + Live Editable Transcript -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left/Main Script Card -->
+        <div class="lg:col-span-7 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-extrabold text-ffaNavy text-base">
+                Texto Oficial — California FFA Speaker Script
+              </h3>
+              <p id="scriptModeSubtitle" class="text-xs text-slate-500 en-sub">
+                Practice Mode active — Toggle English meaning side-by-side if needed.
+              </p>
+            </div>
+            <button type="button" id="toggleSideBySideEnBtn" onclick="toggleCreedEnglishSideBySide()"
+              class="px-3 py-1.5 rounded-lg bg-ffaGoldSoft hover:bg-ffaGold/40 border border-ffaGold text-ffaNavy text-xs font-bold transition cursor-pointer">
+              <span id="sideBySideBtnLabel">Mostrar Traducción al Inglés / Show English Meaning</span>
+            </button>
+          </div>
+
+          <!-- Hidden Memory Mode Placeholder -->
+          <div id="memoryModeMask" class="hidden py-12 px-6 text-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 space-y-3">
+            <div class="w-12 h-12 rounded-full bg-ffaNavy text-ffaGold mx-auto flex items-center justify-center font-extrabold text-xl">
+              🧠
+            </div>
+            <h4 class="font-extrabold text-ffaNavy text-base">
+              Modo Oficial (De Memoria) Activado
+            </h4>
+            <p class="text-xs text-slate-600 max-w-md mx-auto">
+              El texto de El Credo está oculto para simular el salón oficial de competencia. Si te detienes por 10 segundos, puedes usar el botón <strong>Pedir Apuntador</strong>.
+              <span class="block text-slate-500 en-sub mt-1">Official Memory Mode is active. The Creed text is hidden to simulate the official contest room. Use "Request Prompt" if you pause for 10 seconds.</span>
+            </p>
+          </div>
+
+          <!-- Official Verbatim Spanish (and optional side-by-side English) Script -->
+          <div id="officialScriptContainer" class="space-y-4 text-sm leading-relaxed">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- Right Column: Live Speech-to-Text Capture & Accuracy Preview -->
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="font-extrabold text-ffaNavy text-base">
+                  Transcripción en Vivo (Español)
+                </h3>
+                <p class="text-xs text-slate-500 en-sub">
+                  Live Spanish Speech-to-Text — You may edit recognition quirks before scoring.
+                </p>
+              </div>
+              <span id="reciteLiveBadge" class="hidden px-2.5 py-1 rounded-full bg-rose-100 text-rose-700 text-xs font-bold animate-pulse">
+                ● Escuchando / Listening
+              </span>
+            </div>
+
+            <textarea id="reciteTranscriptInput" rows="11"
+              placeholder="Haz clic en 'Iniciar Recitación' y comienza diciendo: El Credo de la FFA por E.M. Tiffany..."
+              class="w-full rounded-xl border border-slate-300 p-3.5 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-ffaNavy"></textarea>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+              <span>Palabras capturadas / Words: <strong id="spokenWordCount" class="text-slate-800">0</strong></span>
+              <button type="button" onclick="loadSamplePerfectTranscript()"
+                class="text-ffaNavy hover:underline font-semibold cursor-pointer">
+                Cargar Ejemplo Completo / Load Demo Script
+              </button>
+            </div>
+
+            <button type="button" onclick="evaluateRecitationAndProceed()"
+              class="w-full py-3 rounded-xl bg-ffaNavy hover:bg-ffaNavyLight text-white font-extrabold text-sm shadow transition cursor-pointer">
+              Evaluar Precisión Palabra por Palabra →
+              <span class="block text-[11px] font-normal text-ffaGold en-sub">Run Word-by-Word Accuracy Judge &amp; Continue</span>
+            </button>
+          </div>
+
+          <!-- Word-by-Word Accuracy Judge Result Card -->
+          <div id="accuracyResultCard" class="hidden bg-white rounded-2xl shadow-sm border-2 border-ffaNavy p-5 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+              <div>
+                <h4 class="font-extrabold text-ffaNavy text-sm">Resultado del Juez de Precisión</h4>
+                <p class="text-[11px] text-slate-500 en-sub">Word-by-Word Accuracy Judge (-2 pts per error)</p>
+              </div>
+              <div class="text-right">
+                <div id="accuracyDeductionBadge" class="text-base font-extrabold text-rose-600">-0 pts</div>
+                <div id="accuracyErrorSummary" class="text-[11px] text-slate-500">0 errores</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 text-[11px] font-semibold">
+              <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Correcta / Matched</span>
+              <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 line-through">Omitida / Missed</span>
+              <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800">Extra / Switched</span>
+            </div>
+
+            <div id="accuracyDiffContainer" class="max-h-56 overflow-y-auto p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs leading-loose flex flex-wrap gap-1">
+            </div>
+
+            <div class="pt-2">
+              <button type="button" onclick="proceedAfterRecitation()"
+                class="w-full py-3 rounded-xl bg-ffaGold hover:bg-ffaGoldDark text-ffaNavy font-extrabold text-sm shadow transition cursor-pointer">
+                <span id="afterReciteNextLabel">Continuar a Ronda de Preguntas (3 Jueces) →</span>
+                <span class="block text-[11px] font-semibold text-ffaNavy/80 en-sub" id="afterReciteNextSub">Proceed to 3-Judge Spanish Q&amp;A Stage</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 3: 3-JUDGE SPANISH Q&A STAGE (RONDA DE PREGUNTAS - 5:00)        -->
+    <!-- ===================================================================== -->
+    <section id="stage3" class="hidden space-y-6">
+      <!-- Top Q&A Header & 5:00 Timer -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-ffaNavy text-ffaGold text-xs font-bold">Etapa 3 / Stage 3</span>
+              <h2 class="text-lg sm:text-xl font-extrabold text-ffaNavy">Ronda de Preguntas — Panel de 3 Jueces</h2>
+            </div>
+            <p class="text-xs text-slate-600 en-sub mt-0.5">
+              3-Judge Spanish Q&amp;A Round — Answer 3 single-part questions in Spanish within the 5:00 total limit (-1 pt/sec over).
+            </p>
+          </div>
+
+          <!-- Live 5:00 Q&A Timer -->
+          <div id="qaTimerCard" class="flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-slate-900 text-white border-2 border-slate-700">
+            <div>
+              <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">
+                Tiempo Preguntas / Limit 5:00
+              </div>
+              <div id="qaTimerDisplay" class="text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-ffaGold">
+                00:00
+              </div>
+            </div>
+            <div class="border-l border-slate-700 pl-3 text-xs">
+              <div id="qaOvertimeBadge" class="font-bold text-emerald-400">En Tiempo / On Pace</div>
+              <div id="qaDeductionPreview" class="text-slate-300 text-[11px]">Penalización: 0 pts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Spanish-Speaking FFA Judges Panel -->
+        <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Judge 1 -->
+          <div id="judgeCard0" class="judge-panel-card p-4 rounded-2xl border-2 border-ffaNavy bg-blue-50/60 transition">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div id="judgeRing0" class="hidden absolute inset-0 rounded-full bg-ffaGold judge-speaking-ring"></div>
+                <div class="relative w-12 h-12 rounded-full bg-ffaNavy text-ffaGold font-extrabold flex items-center justify-center text-base border-2 border-ffaGold">
+                  EM
+                </div>
+              </div>
+              <div>
+                <div class="text-[11px] font-bold uppercase tracking-wider text-ffaNavyLight">Juez 1 • Pregunta 1</div>
+                <div class="font-extrabold text-slate-900 text-sm">Dra. Elena Morales</div>
+                <div class="text-xs text-slate-600">Educación Agrícola • UC Davis</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Judge 2 -->
+          <div id="judgeCard1" class="judge-panel-card p-4 rounded-2xl border-2 border-slate-200 bg-white transition">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div id="judgeRing1" class="hidden absolute inset-0 rounded-full bg-ffaGold judge-speaking-ring"></div>
+                <div class="relative w-12 h-12 rounded-full bg-ffaNavy text-ffaGold font-extrabold flex items-center justify-center text-base border-2 border-ffaGold">
+                  CM
+                </div>
+              </div>
+              <div>
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Juez 2 • Pregunta 2</div>
+                <div class="font-extrabold text-slate-900 text-sm">Ing. Carlos Mendoza</div>
+                <div class="text-xs text-slate-600">Agronegocios • Valle Central</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Judge 3 -->
+          <div id="judgeCard2" class="judge-panel-card p-4 rounded-2xl border-2 border-slate-200 bg-white transition">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div id="judgeRing2" class="hidden absolute inset-0 rounded-full bg-ffaGold judge-speaking-ring"></div>
+                <div class="relative w-12 h-12 rounded-full bg-ffaNavy text-ffaGold font-extrabold flex items-center justify-center text-base border-2 border-ffaGold">
+                  SH
+                </div>
+              </div>
+              <div>
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Juez 3 • Pregunta 3</div>
+                <div class="font-extrabold text-slate-900 text-sm">Profa. Sofía Herrera</div>
+                <div class="text-xs text-slate-600">Liderazgo FFA • Cal Poly</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Question & Answer Workspace -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Question Prompt Card -->
+        <div class="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span id="currentQBadge" class="px-3 py-1 rounded-full bg-ffaGold text-ffaNavy font-extrabold text-xs">
+                  Pregunta 1 de 3
+                </span>
+                <span id="currentQParagraphTag" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 font-semibold text-xs">
+                  Párrafo 1
+                </span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="speakCurrentQuestion()"
+                  class="px-3 py-1.5 rounded-xl bg-ffaNavy hover:bg-ffaNavyLight text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                  <span>🔊 Escuchar</span>
+                  <span class="text-blue-200 font-normal en-sub">/ Replay</span>
+                </button>
+                <button type="button" onclick="swapCurrentQuestion()"
+                  class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer">
+                  <span>↻ Cambiar</span>
+                  <span class="text-slate-500 font-normal en-sub">/ Swap</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Question Text in Spanish + English Helper Underneath -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-ffaNavy text-white space-y-3">
+              <div class="text-xs uppercase tracking-wider text-ffaGold font-bold" id="askingJudgeLabel">
+                Dra. Elena Morales pregunta:
+              </div>
+              <p id="currentQuestionEs" class="text-lg sm:text-xl font-bold leading-snug">
+                ¿Qué significa para ti tener una fe que nace de los hechos y no solo de las palabras en la agricultura?
+              </p>
+              <div class="pt-2.5 border-t border-white/15 en-sub">
+                <div class="text-[11px] uppercase tracking-wider text-blue-200 font-semibold">English Translation (For Understanding):</div>
+                <p id="currentQuestionEn" class="text-sm text-blue-100 mt-0.5">
+                  What does it mean to you to have a faith born not of words but of deeds in agriculture?
+                </p>
+              </div>
+            </div>
+
+            <!-- Coaching Tip Box -->
+            <div class="p-3.5 rounded-xl bg-ffaGoldSoft/70 border border-ffaGold text-xs text-slate-800 space-y-1">
+              <div class="font-extrabold text-ffaNavy">
+                Consejo de Estructura (15–30 seg) <span class="font-normal text-slate-600 en-sub">/ Winning Answer Tip</span>:
+              </div>
+              <p>
+                1) Responde directamente en español, 2) Conecta tu respuesta con un párrafo de El Credo, y 3) Da un ejemplo personal de tu proyecto SAE, clase de agricultura o comunidad.
+                <span class="block text-slate-600 en-sub mt-0.5">1) Answer directly in Spanish, 2) Connect to a paragraph of The Creed, and 3) Give a concrete example from your SAE, ag class, or community.</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Question Step Navigation Pills -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button type="button" id="prevQBtn" onclick="switchQuestionIndex(state.currentQIdx - 1)" disabled
+              class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 text-xs font-bold text-slate-700 cursor-pointer">
+              ← Anterior / Prev
+            </button>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="switchQuestionIndex(0)" id="qDot0" class="w-8 h-8 rounded-full font-bold text-xs bg-ffaNavy text-ffaGold cursor-pointer">1</button>
+              <button type="button" onclick="switchQuestionIndex(1)" id="qDot1" class="w-8 h-8 rounded-full font-bold text-xs bg-slate-200 text-slate-700 cursor-pointer">2</button>
+              <button type="button" onclick="switchQuestionIndex(2)" id="qDot2" class="w-8 h-8 rounded-full font-bold text-xs bg-slate-200 text-slate-700 cursor-pointer">3</button>
+            </div>
+            <button type="button" id="nextQBtn" onclick="switchQuestionIndex(state.currentQIdx + 1)"
+              class="px-3.5 py-2 rounded-xl bg-ffaNavy hover:bg-ffaNavyLight text-xs font-bold text-white cursor-pointer">
+              Siguiente / Next →
+            </button>
+          </div>
+        </div>
+
+        <!-- Student Answer Capture Card -->
+        <div class="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="font-extrabold text-ffaNavy text-base">
+                  Tu Respuesta en Español
+                </h3>
+                <p class="text-xs text-slate-500 en-sub">
+                  Your Spoken/Written Spanish Answer to Judge <span id="answerJudgeNum">1</span>
+                </p>
+              </div>
+              <button type="button" id="toggleQaMicBtn" onclick="toggleQaSpeechRecognition()"
+                class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer">
+                <span id="qaMicBtnText">🎙️ Responder con Voz / Speak Answer</span>
+              </button>
+            </div>
+
+            <textarea id="qaAnswerInput" rows="8" oninput="saveCurrentAnswerText(this.value)"
+              placeholder="Responde en español aquí o usa el micrófono... (Ej. Gracias por su pregunta. Como menciona el primer párrafo de El Credo...)"
+              class="w-full rounded-xl border border-slate-300 p-3.5 text-sm leading-relaxed focus:outline-none focus:ring-2 focus:ring-ffaNavy"></textarea>
+
+            <div class="flex items-center justify-between text-xs text-slate-500">
+              <span>Palabras en esta respuesta / Words: <strong id="qaCurrentWordCount" class="text-slate-800">0</strong></span>
+              <span id="qaSavedIndicator" class="text-emerald-600 font-semibold">✓ Guardado automático</span>
+            </div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 space-y-2">
+            <button type="button" onclick="finishQaAndGenerateScorecard()"
+              class="w-full py-3.5 rounded-xl bg-ffaGold hover:bg-ffaGoldDark text-ffaNavy font-extrabold text-sm sm:text-base shadow-md transition cursor-pointer">
+              Finalizar Ronda y Ver Boleta Oficial (100 Pts) →
+              <span class="block text-xs font-semibold text-ffaNavy/80 en-sub">Finish Q&amp;A &amp; Generate Official 100-Point Rubric Scorecard</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- STAGE 4: OFFICIAL 100-POINT RUBRIC SCORECARD & COACHING REPORT        -->
+    <!-- ===================================================================== -->
+    <section id="stage4" class="hidden space-y-6">
+      <!-- Top Scorecard Banner -->
+      <div class="bg-ffaNavy text-white rounded-2xl shadow-md p-5 sm:p-7 border-b-4 border-ffaGold print-shadow-none">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-ffaGold font-extrabold">
+              California Association FFA • Official Judging Rubric
+            </div>
+            <h2 class="text-xl sm:text-2xl font-extrabold mt-1">
+              Boleta Oficial de Calificación — El Credo de la FFA
+            </h2>
+            <p class="text-xs text-blue-100 en-sub mt-0.5">
+              100-Point Official Scorecard, Deductions Summary &amp; State-Winning Coaching Report
+            </p>
+            <div class="mt-3 flex flex-wrap items-center gap-3 text-xs text-blue-100">
+              <span>Concursante / Contestant: <strong id="reportName" class="text-white">Concursante FFA</strong></span>
+              <span>•</span>
+              <span>Orador / Speaker: <strong id="reportSpeakerNum" class="text-ffaGold">#1</strong></span>
+              <span>•</span>
+              <span id="reportDivisionBadge" class="px-2 py-0.5 rounded bg-white/15 text-white font-bold">División Azul</span>
+            </div>
+          </div>
+
+          <!-- Net Score Display Box -->
+          <div class="bg-ffaNavyDark border-2 border-ffaGold rounded-2xl px-5 py-4 text-center min-w-[180px]">
+            <div class="text-[11px] uppercase tracking-wider text-ffaGold font-bold">
+              Puntuación Neta / Net Score
+            </div>
+            <div id="netTotalScoreDisplay" class="text-4xl font-extrabold text-white mt-0.5">
+              0 <span class="text-base font-normal text-blue-200">/ 100</span>
+            </div>
+            <div id="grossAndDeductionsText" class="text-[11px] text-blue-200 mt-1">
+              Bruto: 0 | Deducciones: -0
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Toolbar -->
+        <div class="mt-5 pt-4 border-t border-white/15 flex flex-wrap items-center gap-3 no-print">
+          <button type="button" onclick="window.print()"
+            class="px-4 py-2 rounded-xl bg-ffaGold hover:bg-ffaGoldDark text-ffaNavy font-extrabold text-xs sm:text-sm transition cursor-pointer">
+            🖨️ Imprimir / Guardar PDF <span class="font-normal en-sub">/ Print Scorecard</span>
+          </button>
+          <button type="button" onclick="navigateStage(1)"
+            class="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm transition cursor-pointer">
+            ↻ Nueva Práctica <span class="font-normal text-blue-200 en-sub">/ Start New Practice</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 100-Point Interactive Rubric Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 8 Cols: 3 Rubric Categories (30 + 30 + 40 = 100) -->
+        <div class="lg:col-span-8 space-y-5">
+
+          <!-- CATEGORY 1: ORAL COMMUNICATION (30 PTS) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4 print-shadow-none">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="font-extrabold text-ffaNavy text-base">
+                  1. Comunicación Oral <span class="text-slate-500 font-semibold en-sub">/ Oral Communication</span>
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Evaluación de ritmo, tono y volumen (0–5 pts × 2 cada indicador).
+                  <span class="en-sub">Pace, Tone, and Volume (0–5 pts × 2 each).</span>
+                </p>
+              </div>
+              <div class="text-right">
+                <span id="oralCatTotal" class="text-lg font-extrabold text-ffaNavy">24</span>
+                <span class="text-xs text-slate-500 font-bold"> / 30 pts</span>
+              </div>
+            </div>
+
+            <div id="oralRubricRows" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- CATEGORY 2: NON-VERBAL COMMUNICATION (30 PTS) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4 print-shadow-none">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="font-extrabold text-ffaNavy text-base">
+                  2. Comunicación No Verbal <span class="text-slate-500 font-semibold en-sub">/ Non-Verbal Communication</span>
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Autoevaluación o calificación del entrenador (0–5 pts × 2 cada indicador).
+                  <span class="en-sub">Self or coach evaluation for Eye Contact, Mannerisms &amp; Gestures, and Poise.</span>
+                </p>
+              </div>
+              <div class="text-right">
+                <span id="nonVerbalCatTotal" class="text-lg font-extrabold text-ffaNavy">24</span>
+                <span class="text-xs text-slate-500 font-bold"> / 30 pts</span>
+              </div>
+            </div>
+
+            <div id="nonVerbalRubricRows" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- CATEGORY 3: QUESTION & ANSWER (40 PTS) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-4 print-shadow-none">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <h3 class="font-extrabold text-ffaNavy text-base">
+                  3. Preguntas y Respuestas <span class="text-slate-500 font-semibold en-sub">/ Question &amp; Answer</span>
+                </h3>
+                <p class="text-xs text-slate-500">
+                  Respuesta (×2 = 10), Apoyo (×3 = 15) y Conocimiento Agrícola (×3 = 15).
+                  <span class="en-sub">Response to Questions (×2), Support (×3), and Knowledge of Agriculture (×3).</span>
+                </p>
+              </div>
+              <div class="text-right">
+                <span id="qaCatTotal" class="text-lg font-extrabold text-ffaNavy">32</span>
+                <span class="text-xs text-slate-500 font-bold"> / 40 pts</span>
+              </div>
+            </div>
+
+            <div id="qaRubricRows" class="space-y-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 4 Cols: Deductions, Speech Analytics & Filler Words -->
+        <div class="lg:col-span-4 space-y-5">
+          <!-- Official Deductions & Net Total Breakdown -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3 print-shadow-none">
+            <h3 class="font-extrabold text-ffaNavy text-base border-b border-slate-100 pb-2.5">
+              Deducciones Oficiales
+              <span class="block text-xs font-normal text-slate-500 en-sub">Official Time &amp; Accuracy Deductions</span>
+            </h3>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                <div>
+                  <div class="font-bold text-slate-800">Puntuación Bruta <span class="font-normal text-slate-500 en-sub">/ Gross Total</span></div>
+                  <div class="text-[11px] text-slate-500">Oral + No Verbal + Preguntas</div>
+                </div>
+                <span id="summaryGrossPts" class="font-extrabold text-sm text-ffaNavy">80 pts</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                <div>
+                  <div class="font-bold text-slate-800">Tiempo Recitación <span class="font-normal text-slate-500 en-sub">/ Recitation Time</span></div>
+                  <div id="summaryReciteTimeDetail" class="text-[11px] text-slate-500">00:00 (Límite 4:00 • -1 pt/seg)</div>
+                </div>
+                <span id="summaryReciteTimeDed" class="font-extrabold text-sm text-rose-600">-0 pts</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                <div>
+                  <div class="font-bold text-slate-800">Tiempo Preguntas <span class="font-normal text-slate-500 en-sub">/ Q&amp;A Time</span></div>
+                  <div id="summaryQaTimeDetail" class="text-[11px] text-slate-500">00:00 (Límite 5:00 • -1 pt/seg)</div>
+                </div>
+                <span id="summaryQaTimeDed" class="font-extrabold text-sm text-rose-600">-0 pts</span>
+              </div>
+
+              <div class="flex items-center justify-between py-1.5 border-b border-slate-100">
+                <div>
+                  <div class="font-bold text-slate-800">Precisión del Texto <span class="font-normal text-slate-500 en-sub">/ Word Accuracy</span></div>
+                  <div id="summaryAccuracyDetail" class="text-[11px] text-slate-500">0 errores × 2 pts</div>
+                </div>
+                <span id="summaryAccuracyDed" class="font-extrabold text-sm text-rose-600">-0 pts</span>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 text-sm">
+                <span class="font-extrabold text-ffaNavy">TOTAL NETO / NET TOTAL:</span>
+                <span id="summaryNetPts" class="font-extrabold text-lg text-ffaNavy">80 / 100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Pace & Spanish Filler Word Counter -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3 print-shadow-none">
+            <h3 class="font-extrabold text-ffaNavy text-base border-b border-slate-100 pb-2.5">
+              Análisis de Oratoria y Muletillas
+              <span class="block text-xs font-normal text-slate-500 en-sub">Pacing (WPM) &amp; Spanish Filler Word Tracker</span>
+            </h3>
+
+            <div class="grid grid-cols-2 gap-2.5 text-center">
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-[11px] font-semibold text-slate-500">Velocidad / Pace</div>
+                <div id="wpmMetricDisplay" class="text-lg font-extrabold text-ffaNavy mt-0.5">-- WPM</div>
+                <div id="wpmFeedbackLabel" class="text-[10px] text-slate-500">Ideal: 115–145</div>
+              </div>
+              <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
+                <div class="text-[11px] font-semibold text-slate-500">Muletillas / Fillers</div>
+                <div id="fillerCountDisplay" class="text-lg font-extrabold text-amber-600 mt-0.5">0</div>
+                <div class="text-[10px] text-slate-500">este, eh, o sea, pues...</div>
+              </div>
+            </div>
+
+            <div id="fillerBreakdownBox" class="text-xs text-slate-600 bg-slate-50 rounded-xl p-3 border border-slate-200">
+              No se detectaron muletillas frecuentes ("este", "eh", "o sea", "pues", "como que", "bueno").
+            </div>
+          </div>
+
+          <!-- Detailed Word-by-Word Script Breakdown (Compact) -->
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 space-y-3 print-shadow-none">
+            <h3 class="font-extrabold text-ffaNavy text-base">
+              Revisión de Precisión del Texto
+              <span class="block text-xs font-normal text-slate-500 en-sub">Word-by-Word Script Comparison</span>
+            </h3>
+            <div id="finalReportAccuracyBox" class="max-h-52 overflow-y-auto p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs leading-relaxed flex flex-wrap gap-1">
+              <span class="text-slate-500 italic">No se registró recitación en esta sesión.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tailored State-Winning Model Answers for the 3 Q&A Questions -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-6 space-y-4 print-shadow-none">
+        <div class="border-b border-slate-100 pb-3">
+          <h3 class="font-extrabold text-ffaNavy text-lg">
+            Respuestas Modelo de Nivel Estatal (California FFA)
+          </h3>
+          <p class="text-xs text-slate-600 en-sub">
+            Tailored State-Winning Model Answers in Spanish (with English translations) for your 3 round questions and division.
+          </p>
+        </div>
+
+        <div id="modelAnswersContainer" class="space-y-4">
+          <!-- Populated dynamically by JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: 30-QUESTION CURATED BILINGUAL STUDY BANK                       -->
+  <!-- ===================================================================== -->
+  <div id="questionBankModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden">
+      <!-- Modal Header -->
+      <div class="bg-ffaNavy text-white px-5 py-4 flex items-center justify-between border-b-4 border-ffaGold">
+        <div>
+          <h3 class="text-lg font-extrabold">
+            Banco Oficial de 30 Preguntas — El Credo de la FFA
+          </h3>
+          <p class="text-xs text-blue-100 en-sub">
+            Curated 30-Question Bilingual Study Bank (6 single-part questions per paragraph with State-Winning Model Answers)
+          </p>
+        </div>
+        <button type="button" onclick="closeBankModal()"
+          class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold flex items-center justify-center cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <!-- Paragraph Filter Tabs -->
+      <div class="bg-slate-100 px-5 py-3 border-b border-slate-200 flex flex-wrap items-center gap-2">
+        <button type="button" onclick="filterBankParagraph(0)" id="bankTab0"
+          class="bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-ffaNavy text-ffaGold cursor-pointer">
+          Todas (30) <span class="en-sub font-normal">/ All</span>
+        </button>
+        <button type="button" onclick="filterBankParagraph(1)" id="bankTab1"
+          class="bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 hover:bg-slate-200 cursor-pointer">
+          Párrafo 1 (6) <span class="en-sub font-normal">/ Para 1</span>
+        </button>
+        <button type="button" onclick="filterBankParagraph(2)" id="bankTab2"
+          class="bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 hover:bg-slate-200 cursor-pointer">
+          Párrafo 2 (6) <span class="en-sub font-normal">/ Para 2</span>
+        </button>
+        <button type="button" onclick="filterBankParagraph(3)" id="bankTab3"
+          class="bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 hover:bg-slate-200 cursor-pointer">
+          Párrafo 3 (6) <span class="en-sub font-normal">/ Para 3</span>
+        </button>
+        <button type="button" onclick="filterBankParagraph(4)" id="bankTab4"
+          class="bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 hover:bg-slate-200 cursor-pointer">
+          Párrafo 4 (6) <span class="en-sub font-normal">/ Para 4</span>
+        </button>
+        <button type="button" onclick="filterBankParagraph(5)" id="bankTab5"
+          class="bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 hover:bg-slate-200 cursor-pointer">
+          Párrafo 5 (6) <span class="en-sub font-normal">/ Para 5</span>
+        </button>
+      </div>
+
+      <!-- Scrollable List of Questions -->
+      <div id="bankListContainer" class="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-50">
+        <!-- Populated dynamically by JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-white px-5 py-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-600">
+        <span>Regla Oficial: Todas las preguntas son de una sola parte (single-part questions).</span>
+        <button type="button" onclick="closeBankModal()"
+          class="px-4 py-2 rounded-xl bg-ffaNavy text-white font-bold cursor-pointer">
+          Cerrar / Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-500 no-print">
+    <div>
+      California Association FFA — El Credo de la FFA Bilingual Practice Simulator (Curricular Code Rev. 06/2024)
+    </div>
+    <div class="en-sub text-[11px] text-slate-400 mt-0.5">
+      Built for California FFA Advisors, Coaches, and Spanish Creed Speaking Contestants.
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- APPLICATION JAVASCRIPT                                                -->
+  <!-- ===================================================================== -->
+  <script>
+    // =========================================================================
+    // 1. OFFICIAL VERBATIM CALIFORNIA FFA SPEAKER SCRIPT & ENGLISH TRANSLATION
+    // =========================================================================
+    const OFFICIAL_CREED_SECTIONS = [
+      {
+        id: 'opening',
+        labelEs: 'Apertura Oficial (Obligatoria)',
+        labelEn: 'Mandatory Official Opening',
+        es: 'El Credo de la FFA por E.M. Tiffany',
+        en: 'The FFA Creed by E.M. Tiffany'
+      },
+      {
+        id: 'p1',
+        labelEs: 'Párrafo 1',
+        labelEn: 'Paragraph 1',
+        es: 'Creo en el futuro de la agricultura, con una fe que no nace de las palabras sino de los hechos— logros conseguidos por las generaciones presentes y pasadas de agricultores; en la promesa de días mejores a través de mejores maneras, así como creo que las mejores cosas de las que gozamos hoy han llegado a nosotros como resultado de las luchas de años anteriores.',
+        en: 'I believe in the future of agriculture, with a faith born not of words but of deeds—achievements won by the present and past generations of agriculturists; in the promise of better days through better ways, even as the better things we now enjoy have come to us from the struggles of former years.'
+      },
+      {
+        id: 'p2',
+        labelEs: 'Párrafo 2',
+        labelEn: 'Paragraph 2',
+        es: 'Creo que vivir y trabajar en una buena finca, o dedicarse a otras actividades agrícolas, es agradable, y al mismo tiempo es un reto, porque conozco las alegrías e inconvenientes de la vida agrícola y mantengo una afición innata por aquellas asociaciones que no le negaré ni siquiera en horas de desaliento.',
+        en: 'I believe that to live and work on a good farm, or to be engaged in other agricultural pursuits, is pleasant as well as challenging; for I know the joys and discomforts of agricultural life and hold an inborn fondness for those associations which, even in hours of discouragement, I cannot deny.'
+      },
+      {
+        id: 'p3',
+        labelEs: 'Párrafo 3',
+        labelEn: 'Paragraph 3',
+        es: 'Creo en nuestro propio liderazgo y en el respeto a los demás. Creo en mi propia capacidad de trabajar de manera eficiente y de pensar con claridad, con cuantos conocimientos y habilidades pueda adquirir, y en la capacidad de los agricultores progresistas para servir nuestros propios intereses y el interés público en la producción y la comercialización del producto de nuestro trabajo.',
+        en: 'I believe in leadership from ourselves and respect from others. I believe in my own ability to work efficiently and think clearly, with such knowledge and skill as I can secure, and in the ability of progressive agriculturists to serve our own and the public interest in producing and marketing the product of our toil.'
+      },
+      {
+        id: 'p4',
+        labelEs: 'Párrafo 4',
+        labelEn: 'Paragraph 4',
+        es: 'Creo en menos dependencia de la caridad y más poder en la negociación; en la vida abundante y en que haya suficiente riqueza honesta para ayudar a que así sea—tanto para los demás como para mí; sin necesidad de caridad y más de ella cuando sea necesario; creo en ser feliz y en ser más honesto con aquellos cuya felicidad depende de mí.',
+        en: 'I believe in less dependence on begging and more power in bargaining; in the life abundant and enough honest wealth to help make it so—for others as well as myself; less need for charity and more of it when needed; being happy myself and playing square with those whose happiness depends upon me.'
+      },
+      {
+        id: 'p5',
+        labelEs: 'Párrafo 5',
+        labelEn: 'Paragraph 5',
+        es: 'Creo que la agricultura de Estados Unidos puede y debe mantenerse fiel a las mejores tradiciones de nuestra vida nacional y que puedo ejercer influencia en mi hogar y en la comunidad, que se mantendrá firme por mi parte en esta inspiradora tarea.',
+        en: 'I believe that American agriculture can and will hold true to the best traditions of our national life and that I can exert an influence in my home and community which will stand solid for my part in that inspiring task.'
+      },
+      {
+        id: 'closing',
+        labelEs: 'Cierre Oficial (Obligatorio)',
+        labelEn: 'Mandatory Official Closing',
+        es: 'Gracias',
+        en: 'Thank you'
+      }
+    ];
+
+    const FULL_OFFICIAL_SPANISH_TEXT = OFFICIAL_CREED_SECTIONS.map(s => s.es).join(' ');
+
+    // =========================================================================
+    // 2. CURATED 30-QUESTION BILINGUAL STUDY BANK (6 PER PARAGRAPH, SINGLE-PART)
+    // =========================================================================
+    const QUESTION_BANK = [
+      // PARAGRAPH 1 (6 Questions)
+      {
+        id: 1, paragraph: 1, division: 'all',
+        es: '¿Qué significa para ti tener una fe que nace de los hechos y no solo de las palabras en la agricultura?',
+        en: 'What does it mean to you to have a faith born not of words but of deeds in agriculture?',
+        modelEsBlue: 'Para mí, una fe basada en hechos significa demostrar nuestro compromiso con el trabajo diario y no solo con promesas. En el primer párrafo de El Credo recordamos que las generaciones pasadas construyeron la agricultura con esfuerzo real. En mi proyecto SAE de crianza de animales, aprendí que alimentar y cuidar a mi ganado todos los días demuestra verdadera dedicación.',
+        modelEsGold: 'Tener una fe nacida de los hechos significa respaldar nuestra visión agrícola con innovación medible, sostenibilidad y productividad constante. Como señala el primer párrafo, el progreso actual proviene de las luchas de generaciones anteriores. En California, los productores demuestran esa fe adoptando riego por goteo de precisión y prácticas regenerativas que garantizan alimentos para el mundo.',
+        modelEn: 'To me, a faith born of deeds means backing our commitment with daily action rather than empty promises, honoring past generations through hands-on SAE dedication and measurable agricultural stewardship.'
+      },
+      {
+        id: 2, paragraph: 1, division: 'all',
+        es: '¿Cómo han contribuido las generaciones pasadas de agricultores a los logros que disfrutamos hoy?',
+        en: 'How have past generations of agriculturists contributed to the achievements we enjoy today?',
+        modelEsBlue: 'Las generaciones pasadas desarrollaron mejores técnicas de cultivo, conservaron los suelos y crearon organizaciones como la FFA para educar a los jóvenes. Gracias a su perseverancia frente a sequías y crisis económicas, hoy contamos con alimentos seguros y tecnología moderna en nuestras escuelas agrícolas.',
+        modelEsGold: 'Los agricultores de décadas pasadas transformaron el Valle Central de California mediante sistemas de irrigación, mejoramiento genético de cultivos y cooperativas agrícolas. Sus sacrificios sentaron las bases de la seguridad alimentaria moderna y nos permiten hoy aplicar biotecnología y agricultura digital con éxito.',
+        modelEn: 'Past generations pioneered soil conservation, irrigation infrastructure, and agricultural education, giving today’s farmers the foundation to innovate and feed a growing population.'
+      },
+      {
+        id: 3, paragraph: 1, division: 'all',
+        es: '¿Qué ejemplo de "mejores maneras" has observado recientemente en la agricultura de California?',
+        en: 'What example of "better ways" have you recently observed in California agriculture?',
+        modelEsBlue: 'Un gran ejemplo de mejores maneras es el uso de sensores de humedad en el suelo y riego por goteo en los huertos de California. En mi clase de ciencias agrícolas aprendimos que estas herramientas ahorran mucha agua mientras mantienen las plantas saludables.',
+        modelEsGold: 'El uso de drones con cámaras multiespectrales y riego automatizado por goteo subsuperficial representa "mejores maneras" en California. Estas tecnologías optimizan cada gota de agua y reducen el uso de fertilizantes, cumpliendo la promesa del primer párrafo de lograr días mejores mediante la ciencia.',
+        modelEn: 'Precision drip irrigation and soil moisture sensors in California orchards exemplify "better ways" by conserving water while maintaining high crop yields.'
+      },
+      {
+        id: 4, paragraph: 1, division: 'all',
+        es: '¿Por qué es importante recordar las luchas de años anteriores al mirar hacia el futuro de la agricultura?',
+        en: 'Why is it important to remember the struggles of former years when looking toward the future of agriculture?',
+        modelEsBlue: 'Recordar las luchas del pasado nos enseña a valorar lo que tenemos y a no rendirnos cuando enfrentamos problemas. Si nuestros abuelos superaron tiempos difíciles sin la tecnología actual, nosotros podemos usar su ejemplo para resolver los retos de hoy.',
+        modelEsGold: 'Comprender las luchas históricas—como la Gran Depresión, las sequías prolongadas y las barreras comerciales—nos brinda resiliencia y perspectiva estratégica. Nos recuerda que cada avance en derechos laborales, conservación y mercados fue ganado con esfuerzo, inspirándonos a defender la industria con orgullo.',
+        modelEn: 'Remembering past struggles teaches resilience and gratitude, reminding us that today’s agricultural advancements were earned through perseverance.'
+      },
+      {
+        id: 5, paragraph: 1, division: 'all',
+        es: '¿Qué te da mayor esperanza sobre el futuro de la agricultura en tu comunidad?',
+        en: 'What gives you the greatest hope for the future of agriculture in your community?',
+        modelEsBlue: 'Me da mucha esperanza ver a tantos estudiantes de mi capítulo de la FFA trabajando con entusiasmo en sus proyectos SAE y aprendiendo sobre plantas, animales y mecánica agrícola. Nosotros somos la próxima generación lista para cuidar el campo.',
+        modelEsGold: 'Mi mayor esperanza radica en la combinación de juventud preparada en la FFA y la innovación tecnológica de los productores locales. Al ver cómo los jóvenes integran la ciencia de datos, la sostenibilidad ambiental y el liderazgo comunitario, sé que el futuro agrícola de nuestra región está en buenas manos.',
+        modelEn: 'Seeing dedicated FFA youth combining hands-on SAE experience with modern agricultural science gives me strong confidence in our community’s future.'
+      },
+      {
+        id: 6, paragraph: 1, division: 'all',
+        es: '¿De qué manera tu proyecto SAE demuestra tu propia fe en el futuro de la agricultura?',
+        en: 'In what way does your SAE project demonstrate your own faith in the future of agriculture?',
+        modelEsBlue: 'Mi proyecto SAE demuestra mi fe porque invierto mi tiempo, ahorros y esfuerzo en aprender cómo producir alimentos de calidad. Aunque requiere madrugar y trabajar duro, sé que estas habilidades me preparan para una carrera agrícola.',
+        modelEsGold: 'A través de mi proyecto SAE, aplico registros financieros, manejo sanitario preventivo y prácticas sostenibles para mejorar la eficiencia productiva. Invertir en el desarrollo de habilidades técnicas hoy refleja mi convicción de que la agricultura ofrece carreras viables y esenciales para el mañana.',
+        modelEn: 'Investing my time, record-keeping, and daily care into my SAE demonstrates practical faith that agricultural skills build a meaningful career.'
+      },
+
+      // PARAGRAPH 2 (6 Questions)
+      {
+        id: 7, paragraph: 2, division: 'all',
+        es: '¿Cuál consideras que es una de las mayores alegrías de la vida agrícola?',
+        en: 'What do you consider to be one of the greatest joys of agricultural life?',
+        modelEsBlue: 'Una de las mayores alegrías es ver el resultado directo de tu esfuerzo, como cuando nace un animal sano o cosechas las verduras que sembraste. También disfruto mucho el compañerismo entre familias y miembros de la FFA que siempre se apoyan.',
+        modelEsGold: 'La mayor alegría de la vida agrícola es la satisfacción tangible de alimentar y vestir a la sociedad mientras trabajas en armonía con la naturaleza. En el segundo párrafo celebramos esas asociaciones únicas donde productores, familias y jóvenes de la FFA comparten valores de trabajo honesto y servicio.',
+        modelEn: 'One of the greatest joys is seeing the tangible results of hard work—harvesting a crop or raising healthy livestock—alongside supportive FFA and rural communities.'
+      },
+      {
+        id: 8, paragraph: 2, division: 'all',
+        es: '¿Qué inconveniente de la agricultura has experimentado personalmente y cómo lo superaste?',
+        en: 'What discomfort of agriculture have you personally experienced and how did you overcome it?',
+        modelEsBlue: 'He experimentado el inconveniente de trabajar afuera bajo el frío de la mañana o el calor del verano para cuidar mis animales y plantas. Lo superé manteniendo una rutina disciplinada y recordando que los seres vivos dependen de mi responsabilidad.',
+        modelEsGold: 'Enfrentar condiciones climáticas extremas y fluctuaciones inesperadas en los costos de insumos ha sido un reto directo en mi experiencia agrícola. Lo superé mediante una planificación financiera rigurosa, ajustes oportunos en el manejo y el consejo de mi asesor de la FFA.',
+        modelEn: 'Working through extreme weather and rising input costs taught me discipline, careful planning, and reliance on mentors to overcome setbacks.'
+      },
+      {
+        id: 9, paragraph: 2, division: 'all',
+        es: '¿Por qué E.M. Tiffany describe la vida agrícola como agradable y al mismo tiempo un reto?',
+        en: 'Why does E.M. Tiffany describe agricultural life as pleasant as well as challenging?',
+        modelEsBlue: 'Porque trabajar con la naturaleza y los animales trae mucha satisfacción, pero también exige esfuerzo físico, paciencia y resolver problemas todos los días. Ese equilibrio hace que el éxito en la agricultura sea tan valioso.',
+        modelEsGold: 'La agricultura es agradable porque conecta el esfuerzo humano con la creación de vida y comunidad; sin embargo, es un reto porque está sujeta al clima, los mercados globales y los ciclos biológicos. Esa dualidad forma el carácter resiliente que distingue al agricultor.',
+        modelEn: 'Agriculture rewards us with purpose and connection to nature, yet constantly challenges us with unpredictable weather, markets, and biological demands.'
+      },
+      {
+        id: 10, paragraph: 2, division: 'all',
+        es: '¿Qué significan para ti "aquellas asociaciones" mencionadas en el segundo párrafo de El Credo?',
+        en: 'What do "those associations" mentioned in the second paragraph of The Creed mean to you?',
+        modelEsBlue: 'Se refiere a las amistades y la unión entre los agricultores, nuestras familias, los maestros de agricultura y nuestros compañeros de la FFA. Son personas que entienden nuestro trabajo y nos animan cuando enfrentamos dificultades.',
+        modelEsGold: 'Esas asociaciones representan el tejido social y profesional de la agricultura: desde el vínculo con mentores y asesores de la FFA hasta las cooperativas de productores y familias rurales que comparten una misma ética de trabajo y apoyo mutuo.',
+        modelEn: '"Those associations" represent the lifelong bonds among FFA members, advisors, farm families, and industry mentors who share our agricultural values.'
+      },
+      {
+        id: 11, paragraph: 2, division: 'all',
+        es: '¿Cómo mantienes tu entusiasmo durante las "horas de desaliento" en tus proyectos o estudios?',
+        en: 'How do you maintain your enthusiasm during "hours of discouragement" in your projects or studies?',
+        modelEsBlue: 'Cuando siento desaliento, hablo con mi maestro de agricultura o mis compañeros de equipo, reviso cuánto he avanzado y recuerdo mis metas. Saber que cada error es una lección me ayuda a seguir adelante con ánimo.',
+        modelEsGold: 'Durante las horas de desaliento, recurro al propósito detrás de mi trabajo, analizo los datos para corregir el rumbo y me apoyo en mi red de mentores en la FFA. Entiendo que los obstáculos temporales fortalecen nuestra capacidad de liderazgo.',
+        modelEn: 'During hours of discouragement, I lean on my FFA advisor and teammates, reflect on my progress, and treat setbacks as learning opportunities.'
+      },
+      {
+        id: 12, paragraph: 2, division: 'all',
+        es: '¿De qué forma las actividades agrícolas fuera de la finca tradicional cumplen con el segundo párrafo?',
+        en: 'How do agricultural pursuits outside of a traditional farm fulfill the second paragraph?',
+        modelEsBlue: 'El segundo párrafo incluye "otras actividades agrícolas" como la floricultura, la mecánica agrícola, la ciencia de alimentos y la veterinaria. Todas estas carreras comparten las mismas alegrías, retos y pasión por servir a la agricultura.',
+        modelEsGold: 'La agricultura moderna abarca mucho más que la producción primaria: incluye biotecnología, gestión hídrica, agronegocios y educación. Quienes trabajan en estas áreas enfrentan sus propios retos técnicos y comparten la misma devoción por fortalecer la cadena alimentaria.',
+        modelEn: 'Modern agricultural pursuits—from ag mechanics and floriculture to food science and ag business—share the same challenges, rewards, and devotion to the industry.'
+      },
+
+      // PARAGRAPH 3 (6 Questions)
+      {
+        id: 13, paragraph: 3, division: 'all',
+        es: '¿Cómo ganamos el respeto de los demás a través de nuestro propio liderazgo en la FFA?',
+        en: 'How do we earn respect from others through leadership from ourselves in FFA?',
+        modelEsBlue: 'Ganamos el respeto dando el buen ejemplo, cumpliendo nuestras responsabilidades, escuchando a los demás y sirviendo a nuestra comunidad. En la FFA aprendemos que un verdadero líder trabaja junto a su equipo.',
+        modelEsGold: 'El respeto se conquista mediante la integridad, la preparación y el servicio desinteresado. Cuando los miembros de la FFA lideramos proyectos comunitarios con ética y conocimiento técnico, demostramos a la sociedad que los jóvenes agricultores somos ciudadanos ejemplares.',
+        modelEn: 'We earn respect by leading with integrity, listening to others, and serving our community with preparation and ethical action.'
+      },
+      {
+        id: 14, paragraph: 3, division: 'all',
+        es: '¿Por qué es esencial combinar "trabajar de manera eficiente" con "pensar con claridad"?',
+        en: 'Why is it essential to combine "working efficiently" with "thinking clearly"?',
+        modelEsBlue: 'Porque trabajar duro sin planear puede hacernos perder tiempo y recursos. Cuando pensamos con claridad antes de actuar, hacemos el trabajo mejor, más seguro y con mejores resultados en nuestros proyectos.',
+        modelEsGold: 'En la agricultura contemporánea, el esfuerzo físico debe ir acompañado de análisis estratégico. Pensar con claridad nos permite interpretar datos, optimizar recursos escasos como el agua y tomar decisiones que maximizan la eficiencia y la rentabilidad sostenible.',
+        modelEn: 'Hard work without clear planning wastes time and resources; thinking clearly ensures safe, strategic, and productive agricultural results.'
+      },
+      {
+        id: 15, paragraph: 3, division: 'all',
+        es: '¿Qué conocimientos y habilidades estás adquiriendo actualmente para prepararte para una carrera agrícola?',
+        en: 'What knowledge and skills are you currently acquiring to prepare for an agricultural career?',
+        modelEsBlue: 'Actualmente estoy aprendiendo a hablar en público, llevar registros financieros en mi proyecto SAE, trabajar en equipo y aplicar principios de ciencia animal y vegetal en mis clases de agricultura.',
+        modelEsGold: 'Estoy desarrollando competencias en comunicación bilingüe, análisis de presupuestos agrícolas, manejo sostenible de recursos y liderazgo parlamentario, habilidades clave para conectar a los productores con mercados diversos en California.',
+        modelEn: 'I am building public speaking, SAE financial record-keeping, teamwork, and applied plant and animal science skills in my agriculture classes.'
+      },
+      {
+        id: 16, paragraph: 3, division: 'all',
+        es: '¿Qué significa ser un "agricultor progresista" en la actualidad?',
+        en: 'What does it mean to be a "progressive agriculturist" today?',
+        modelEsBlue: 'Un agricultor progresista es alguien que siempre busca aprender nuevas ideas, usa la ciencia para cuidar la tierra y se adapta a los cambios para producir alimentos mejores y más seguros.',
+        modelEsGold: 'Un agricultor progresista integra la innovación científica, la responsabilidad ambiental y la visión empresarial. No teme adoptar nuevas tecnologías ni dialogar con los consumidores para mejorar continuamente la producción y comercialización de alimentos.',
+        modelEn: 'A progressive agriculturist embraces continuous learning, science-based sustainability, and adaptability to improve food production.'
+      },
+      {
+        id: 17, paragraph: 3, division: 'all',
+        es: '¿Cómo sirven los agricultores tanto a sus propios intereses como al interés público?',
+        en: 'How do agriculturists serve both their own interests and the public interest?',
+        modelEsBlue: 'Cuando un agricultor produce alimentos saludables y cuida su tierra, gana el sustento para su familia y al mismo tiempo alimenta a toda la comunidad y protege el medio ambiente para todos.',
+        modelEsGold: 'Existe una sinergia directa: al gestionar negocios rentables y conservar los recursos naturales, los productores aseguran su estabilidad económica mientras garantizan al público un suministro confiable, accesible y seguro de alimentos y fibras.',
+        modelEn: 'By running sustainable, profitable operations, farmers support their families while providing the public with safe, abundant food and environmental stewardship.'
+      },
+      {
+        id: 18, paragraph: 3, division: 'all',
+        es: '¿Por qué la comercialización del producto es tan importante como su producción?',
+        en: 'Why is marketing the product of our toil just as important as producing it?',
+        modelEsBlue: 'Porque de nada sirve cultivar una buena cosecha si no podemos venderla a un precio justo ni llevarla a las familias que la necesitan. Saber comercializar ayuda a que el agricultor pueda seguir produciendo.',
+        modelEsGold: 'La producción crea el bien, pero la comercialización captura su valor económico y lo conecta con el consumidor. En un estado exportador como California, entender las cadenas de suministro, el valor agregado y la promoción es vital para la viabilidad del productor.',
+        modelEn: 'Production creates the crop, while effective marketing connects it to consumers at a fair price so farms remain economically sustainable.'
+      },
+
+      // PARAGRAPH 4 (6 Questions)
+      {
+        id: 19, paragraph: 4, division: 'all',
+        es: '¿Qué significa "menos dependencia de la caridad y más poder en la negociación" para los agricultores?',
+        en: 'What does "less dependence on begging and more power in bargaining" mean for farmers?',
+        modelEsBlue: 'Significa que los agricultores no quieren pedir limosna ni favores, sino tener voz y fuerza justa para negociar buenos precios por los alimentos que producen con tanto esfuerzo.',
+        modelEsGold: 'Significa que el sector agrícola busca equidad comercial y autosuficiencia económica mediante cooperativas, contratos justos y representación informada, en lugar de depender de subsidios de emergencia o caridad.',
+        modelEn: 'It means farmers seek fair market leverage, cooperatives, and self-reliance rather than relying on handouts or charity.'
+      },
+      {
+        id: 20, paragraph: 4, division: 'all',
+        es: '¿Cómo defines tú una "vida abundante" en el contexto de El Credo de la FFA?',
+        en: 'How do you define an "abundant life" in the context of The FFA Creed?',
+        modelEsBlue: 'Una vida abundante no es solo tener dinero, sino tener buena salud, una familia unida, valores honestos, amigos en la comunidad y la satisfacción de ayudar a los demás con nuestro trabajo.',
+        modelEsGold: 'La vida abundante es el equilibrio integral entre bienestar económico honesto, propósito profesional, salud familiar y generosidad comunitaria. Es prosperar de manera ética para poder elevar la calidad de vida de quienes nos rodean.',
+        modelEn: 'An abundant life goes beyond money—it means good health, strong family and community ties, honest work, and the ability to uplift others.'
+      },
+      {
+        id: 21, paragraph: 4, division: 'all',
+        es: '¿Por qué E.M. Tiffany enfatiza el concepto de "riqueza honesta"?',
+        en: 'Why does E.M. Tiffany emphasize the concept of "honest wealth"?',
+        modelEsBlue: 'Porque el éxito verdadero debe lograrse sin hacer trampa ni perjudicar a nadie. La riqueza honesta viene del trabajo duro, de cuidar la tierra y de tratar con justicia a los clientes y trabajadores.',
+        modelEsGold: 'Enfatiza la riqueza honesta porque la prosperidad económica solo tiene valor moral cuando se obtiene mediante la integridad, el comercio justo y la responsabilidad social, permitiendo generar bienestar compartido.',
+        modelEn: 'Honest wealth emphasizes that financial success must be earned ethically through hard work, fairness, and respect for people and the land.'
+      },
+      {
+        id: 22, paragraph: 4, division: 'all',
+        es: '¿Cómo podemos practicar "menos necesidad de caridad y más de ella cuando sea necesario" en nuestra comunidad?',
+        en: 'How can we practice "less need for charity and more of it when needed" in our community?',
+        modelEsBlue: 'Primero trabajamos duro para ser independientes y autosuficientes, pero cuando un vecino o familia pasa por una emergencia o necesita alimentos, nuestro capítulo de la FFA siempre está listo para ayudar.',
+        modelEsGold: 'Fomentamos la autosuficiencia mediante la educación y el empleo digno para reducir la dependencia; al mismo tiempo, movilizamos nuestra generosidad en bancos de alimentos y colectas comunitarias cuando ocurren desastres o necesidades reales.',
+        modelEn: 'We strive for self-reliance first, while generously supporting food drives and neighbors in genuine times of crisis.'
+      },
+      {
+        id: 23, paragraph: 4, division: 'all',
+        es: '¿Qué significa "ser más honesto con aquellos cuya felicidad depende de mí"?',
+        en: 'What does "playing square with those whose happiness depends upon me" mean to you?',
+        modelEsBlue: 'Significa tratar con justicia, respeto y sinceridad a mi familia, mis compañeros de equipo y mis maestros, cumpliendo mi palabra y haciendo siempre lo correcto.',
+        modelEsGold: 'Significa actuar con transparencia, lealtad y ética hacia nuestras familias, empleados, consumidores y compañeros de equipo, reconociendo que nuestras decisiones impactan directamente su bienestar y confianza.',
+        modelEn: 'It means treating our family, teammates, and community with fairness, honesty, and accountability in every action.'
+      },
+      {
+        id: 24, paragraph: 4, division: 'all',
+        es: '¿Cómo contribuye la cooperación entre agricultores a aumentar su poder en la negociación?',
+        en: 'How does cooperation among farmers help increase their power in bargaining?',
+        modelEsBlue: 'Cuando los agricultores se unen en cooperativas, pueden comprar semillas y equipos a mejores precios y vender sus cosechas juntos con más fuerza que si trabajaran completamente solos.',
+        modelEsGold: 'A través de cooperativas agrícolas—muy exitosas en California en sectores como lácteos, almendras y cítricos—los productores consolidan volumen, comparten infraestructura de procesamiento y negocian contratos más equitativos en mercados nacionales e internacionales.',
+        modelEn: 'Agricultural cooperatives allow growers to pool resources, lower input costs, and negotiate fairer market prices together.'
+      },
+
+      // PARAGRAPH 5 (6 Questions)
+      {
+        id: 25, paragraph: 5, division: 'all',
+        es: '¿Cuáles son algunas de "las mejores tradiciones de nuestra vida nacional" que la agricultura debe mantener?',
+        en: 'What are some of "the best traditions of our national life" that agriculture should hold true to?',
+        modelEsBlue: 'Algunas de nuestras mejores tradiciones son el trabajo duro, la honestidad, el amor por la familia, el respeto a nuestra bandera y el espíritu de ayudar al prójimo en nuestra comunidad.',
+        modelEsGold: 'Entre esas tradiciones destacan la ética del trabajo, la responsabilidad cívica, la hospitalidad rural, el cuidado intergeneracional de la tierra y el compromiso democrático de servir al bien común.',
+        modelEn: 'Key traditions include a strong work ethic, honesty, family values, civic service, and responsible stewardship of the land.'
+      },
+      {
+        id: 26, paragraph: 5, division: 'all',
+        es: '¿De qué manera puedes ejercer una influencia positiva en tu propio hogar?',
+        en: 'In what way can you exert a positive influence in your own home?',
+        modelEsBlue: 'Puedo influir positivamente en mi hogar siendo responsable con mis estudios y mi proyecto SAE, ayudando a mi familia sin que me lo pidan y compartiendo los valores de respeto que aprendo en la FFA.',
+        modelEsGold: 'En mi hogar ejerzo influencia modelando disciplina, gratitud y liderazgo de servicio: apoyando las metas familiares, fomentando conversaciones informadas sobre la agricultura y demostrando integridad en mis acciones diarias.',
+        modelEn: 'I can influence my home by modeling responsibility, helping my family, and living out FFA values of respect and dedication.'
+      },
+      {
+        id: 27, paragraph: 5, division: 'all',
+        es: '¿Qué acción concreta has realizado para ejercer influencia positiva en tu comunidad?',
+        en: 'What concrete action have you taken to exert a positive influence in your community?',
+        modelEsBlue: 'Con mi capítulo de la FFA participé en la limpieza de parques locales y ayudé a enseñar a niños de primaria de dónde vienen sus alimentos. Eso mostró el valor de la agricultura en nuestra ciudad.',
+        modelEsGold: 'Organicé y participé en talleres de alfabetización agrícola para escuelas primarias y colectas de alimentos frescos para familias locales, fortaleciendo el vínculo entre los productores de nuestra región y los consumidores urbanos.',
+        modelEn: 'Through my FFA chapter, I volunteered in community cleanups and agricultural literacy workshops for elementary students.'
+      },
+      {
+        id: 28, paragraph: 5, division: 'all',
+        es: '¿Cuál consideras que es "esta inspiradora tarea" con la que concluye El Credo de la FFA?',
+        en: 'What do you consider "that inspiring task" with which The FFA Creed concludes?',
+        modelEsBlue: 'Esa inspiradora tarea es alimentar y vestir al mundo mientras cuidamos nuestros recursos naturales y formamos mejores líderes jóvenes a través de la educación agrícola y la FFA.',
+        modelEsGold: 'Es la misión trascendental de sostener la seguridad alimentaria mundial, preservar nuestros recursos naturales para futuras generaciones y mantener vivos los valores cívicos y éticos que fortalecen a nuestra nación.',
+        modelEn: 'That inspiring task is feeding and clothing the world sustainably while developing ethical youth leaders through agricultural education.'
+      },
+      {
+        id: 29, paragraph: 5, division: 'all',
+        es: '¿Por qué es importante que los jóvenes bilingües participen en El Credo de la FFA en California?',
+        en: 'Why is it important for bilingual youth to participate in El Credo de la FFA in California?',
+        modelEsBlue: 'Porque en California muchísimos trabajadores y familias agrícolas hablan español. Recitar El Credo en español incluye a nuestras familias y nos prepara para ser líderes que unen a toda la comunidad agrícola.',
+        modelEsGold: 'California es el estado agrícola más diverso del país, donde el español es el idioma diario de gran parte de nuestra fuerza laboral y productores. Competir en El Credo en español honra nuestras raíces y forma líderes bilingües indispensables para la industria.',
+        modelEn: 'Spanish is spoken across California’s agricultural workforce; competing in El Credo honors our families and prepares vital bilingual leaders.'
+      },
+      {
+        id: 30, paragraph: 5, division: 'all',
+        es: '¿Cómo ha cambiado tu visión personal de la agricultura desde que comenzaste a memorizar El Credo?',
+        en: 'How has your personal view of agriculture changed since you began memorizing The Creed?',
+        modelEsBlue: 'Antes pensaba que la agricultura era solo sembrar plantas o cuidar animales, pero al estudiar El Credo entendí que también significa liderazgo, honestidad, servicio comunitario y orgullo por nuestras raíces.',
+        modelEsGold: 'Memorizar y analizar El Credo transformó mi perspectiva: comprendí que la agricultura no es solo una industria económica, sino una vocación cívica que exige integridad personal, innovación constante y liderazgo activo en la comunidad.',
+        modelEn: 'Memorizing The Creed taught me that agriculture is more than farming—it is a calling rooted in leadership, honesty, and community service.'
+      }
+    ];
+
+    // =========================================================================
+    // 3. RUBRIC DEFINITIONS (CALIFORNIA FFA 100-POINT RUBRIC)
+    // =========================================================================
+    const RUBRIC_ITEMS = {
+      oral: [
+        {
+          id: 'pace',
+          titleEs: 'Ritmo (Pace)',
+          titleEn: 'Pace (0–5 × 2 = 10 pts)',
+          descEs: 'Velocidad adecuada, pausas naturales entre párrafos y fluidez sin apresurarse.',
+          descEn: 'Appropriate speed, natural pauses between paragraphs, and smooth phrasing.',
+          multiplier: 2,
+          score: 4
+        },
+        {
+          id: 'tone',
+          titleEs: 'Tono y Expresión (Tone)',
+          titleEn: 'Tone (0–5 × 2 = 10 pts)',
+          descEs: 'Sinceridad, convicción emocional, énfasis apropiado y pronunciación clara en español.',
+          descEn: 'Sincerity, conviction, expressive inflection, and clear Spanish pronunciation.',
+          multiplier: 2,
+          score: 4
+        },
+        {
+          id: 'volume',
+          titleEs: 'Volumen y Proyección (Volume)',
+          titleEn: 'Volume (0–5 × 2 = 10 pts)',
+          descEs: 'Voz audaz, proyectada a todo el salón sin gritar ni perder fuerza al final de las frases.',
+          descEn: 'Clear, well-projected voice audible throughout the room without trailing off.',
+          multiplier: 2,
+          score: 4
+        }
+      ],
+      nonVerbal: [
+        {
+          id: 'eyeContact',
+          titleEs: 'Contacto Visual (Eye Contact)',
+          titleEn: 'Eye Contact (0–5 × 2 = 10 pts)',
+          descEs: 'Conexión visual equilibrada y sincera con los tres jueces durante recitación y preguntas.',
+          descEn: 'Balanced, confident eye contact shared across all three judges.',
+          multiplier: 2,
+          score: 4
+        },
+        {
+          id: 'mannerisms',
+          titleEs: 'Modales y Ademanes (Mannerisms & Gestures)',
+          titleEn: 'Mannerisms & Gestures (0–5 × 2 = 10 pts)',
+          descEs: 'Gestos naturales que refuerzan el mensaje, sin movimientos nerviosos ni distracciones.',
+          descEn: 'Purposeful, natural gestures without distracting nervous habits.',
+          multiplier: 2,
+          score: 4
+        },
+        {
+          id: 'poise',
+          titleEs: 'Porte y Presencia (Poise)',
+          titleEn: 'Poise (0–5 × 2 = 10 pts)',
+          descEs: 'Postura erguida, compostura profesional, calma bajo presión y vestimenta oficial FFA.',
+          descEn: 'Upright posture, professional composure under pressure, and Official FFA Dress.',
+          multiplier: 2,
+          score: 4
+        }
+      ],
+      qa: [
+        {
+          id: 'response',
+          titleEs: 'Respuesta a las Preguntas (Response to Questions)',
+          titleEn: 'Response to Questions (0–5 × 2 = 10 pts)',
+          descEs: 'Contesta directamente lo que preguntó el juez con claridad, lógica y seguridad en español.',
+          descEn: 'Directly answers the judge’s question with clear, logical Spanish structure.',
+          multiplier: 2,
+          score: 4
+        },
+        {
+          id: 'support',
+          titleEs: 'Apoyo y Ejemplos (Support)',
+          titleEn: 'Support (0–5 × 3 = 15 pts)',
+          descEs: 'Respalda sus ideas con párrafos de El Credo, experiencias de SAE, FFA y ejemplos reales.',
+          descEn: 'Supports answers with Creed connections, SAE experiences, and real examples.',
+          multiplier: 3,
+          score: 4
+        },
+        {
+          id: 'knowledge',
+          titleEs: 'Conocimiento de la Agricultura (Knowledge of Agriculture)',
+          titleEn: 'Knowledge of Agriculture (0–5 × 3 = 15 pts)',
+          descEs: 'Demuestra comprensión sólida de la industria agrícola, prácticas actuales y valores FFA.',
+          descEn: 'Demonstrates accurate understanding of agriculture, current practices, and FFA.',
+          multiplier: 3,
+          score: 4
+        }
+      ]
+    };
+
+    const JUDGES = [
+      { name: 'Dra. Elena Morales', role: 'Educación Agrícola • UC Davis' },
+      { name: 'Ing. Carlos Mendoza', role: 'Agronegocios • Valle Central' },
+      { name: 'Profa. Sofía Herrera', role: 'Liderazgo FFA • Cal Poly' }
+    ];
+
+    // =========================================================================
+    // 4. APPLICATION STATE
+    // =========================================================================
+    const state = {
+      showEnglish: true,
+      currentStage: 1,
+      contestantName: '',
+      speakerNumber: 1,
+      division: 'blue',       // 'blue' | 'gold'
+      practiceMode: 'full',   // 'full' | 'recite' | 'qa'
+      memoryMode: false,      // false = Practice (with text), true = Official Memory Mode
+      showSideBySideEn: false,
+
+      // Hardware / Audio Test
+      micTesting: false,
+      audioCtx: null,
+      micStream: null,
+      micAnimFrame: null,
+      testRecognition: null,
+
+      // Stage 2: Recitation
+      reciteRunning: false,
+      reciteSeconds: 0,
+      reciteTimerInterval: null,
+      lastSpeechTimestamp: 0,
+      pauseMonitorInterval: null,
+      reciteRecognition: null,
+      reciteFinalTranscript: '',
+      reciteInterimTranscript: '',
+      accuracyErrors: 0,
+      accuracyDiffTokens: [],
+
+      // Stage 3: Q&A
+      selectedQuestions: [],
+      currentQIdx: 0,
+      qaAnswers: ['', '', ''],
+      qaSeconds: 0,
+      qaTimerInterval: null,
+      qaRecognizing: false,
+      qaRecognition: null
+    };
+
+    // =========================================================================
+    // 5. INITIALIZATION & UI HELPERS
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderOfficialScript();
+      pickThreeRandomQuestions();
+      renderQuestionBankList(0);
+      renderRubricSliders();
+      updateSetupSummary();
+
+      document.getElementById('reciteTranscriptInput').addEventListener('input', (e) => {
+        const words = tokenizeWords(e.target.value);
+        document.getElementById('spokenWordCount').textContent = words.length;
+      });
+    });
+
+    function showToast(title, msg) {
+      const banner = document.getElementById('toastBanner');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMsg').textContent = msg;
+      banner.classList.remove('hidden');
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => hideToast(), 5500);
+    }
+
+    function hideToast() {
+      document.getElementById('toastBanner').classList.add('hidden');
+    }
+
+    function toggleEnglishHelper() {
+      state.showEnglish = !state.showEnglish;
+      document.body.classList.toggle('hide-en', !state.showEnglish);
+      const label = document.getElementById('enStatusLabel');
+      const dot = document.getElementById('enStatusDot');
+      label.textContent = state.showEnglish ? 'ON' : 'OFF';
+      dot.className = state.showEnglish
+        ? 'inline-block w-2.5 h-2.5 rounded-full bg-ffaGold'
+        : 'inline-block w-2.5 h-2.5 rounded-full bg-slate-400';
+    }
+
+    function navigateStage(stageNum) {
+      // Stop active timers/recognizers if leaving stages
+      if (state.currentStage === 2 && stageNum !== 2) {
+        stopRecitation(true);
+      }
+      if (state.currentStage === 3 && stageNum !== 3) {
+        stopQaTimer();
+        stopQaSpeechRecognition();
+      }
+
+      state.currentStage = stageNum;
+      [1, 2, 3, 4].forEach(n => {
+        const sec = document.getElementById(`stage${n}`);
+        const btn = document.getElementById(`stepBtn${n}`);
+        if (n === stageNum) {
+          sec.classList.remove('hidden');
+          btn.className = 'step-pill flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-lg font-semibold text-left transition bg-ffaGold text-ffaNavy';
+          btn.querySelector('span').className = 'w-5 h-5 rounded-full bg-ffaNavy text-ffaGold flex items-center justify-center text-[11px] font-bold shrink-0';
+        } else {
+          sec.classList.add('hidden');
+          btn.className = 'step-pill flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 px-2.5 py-1.5 rounded-lg font-semibold text-left transition text-blue-200 hover:bg-white/10';
+          btn.querySelector('span').className = 'w-5 h-5 rounded-full bg-white/15 text-white flex items-center justify-center text-[11px] font-bold shrink-0';
+        }
+      });
+
+      if (stageNum === 2) {
+        applyMemoryModeUI();
+      }
+      if (stageNum === 3) {
+        startQaTimer();
+        renderCurrentQuestion();
+      }
+      if (stageNum === 4) {
+        generateScorecardReport();
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // =========================================================================
+    // 6. STAGE 1: SETUP SELECTION & HARDWARE AUDIO CHECK
+    // =========================================================================
+    function selectDivision(div) {
+      state.division = div;
+      const blueBtn = document.getElementById('divBlueBtn');
+      const goldBtn = document.getElementById('divGoldBtn');
+      if (div === 'blue') {
+        blueBtn.className = 'div-card text-left p-4 rounded-xl border-2 border-ffaNavy bg-blue-50/70 transition cursor-pointer';
+        goldBtn.className = 'div-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer';
+      } else {
+        goldBtn.className = 'div-card text-left p-4 rounded-xl border-2 border-ffaNavy bg-amber-50/60 transition cursor-pointer';
+        blueBtn.className = 'div-card text-left p-4 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer';
+      }
+      updateSetupSummary();
+    }
+
+    function selectPracticeMode(mode) {
+      state.practiceMode = mode;
+      const map = {
+        full: 'modeFullBtn',
+        recite: 'modeReciteBtn',
+        qa: 'modeQaBtn'
+      };
+      Object.entries(map).forEach(([k, id]) => {
+        const el = document.getElementById(id);
+        if (k === mode) {
+          el.className = 'mode-card text-left p-3.5 rounded-xl border-2 border-ffaNavy bg-blue-50/70 transition cursor-pointer';
+        } else {
+          el.className = 'mode-card text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer';
+        }
+      });
+      updateSetupSummary();
+    }
+
+    function selectMemoryMode(isOfficialMemory) {
+      state.memoryMode = isOfficialMemory;
+      const prac = document.getElementById('memPracticeBtn');
+      const off = document.getElementById('memOfficialBtn');
+      if (!isOfficialMemory) {
+        prac.className = 'mem-card text-left p-3.5 rounded-xl border-2 border-ffaNavy bg-blue-50/70 transition cursor-pointer';
+        off.className = 'mem-card text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer';
+      } else {
+        off.className = 'mem-card text-left p-3.5 rounded-xl border-2 border-ffaNavy bg-amber-50/60 transition cursor-pointer';
+        prac.className = 'mem-card text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 transition cursor-pointer';
+      }
+      updateSetupSummary();
+    }
+
+    function updateSetupSummary() {
+      const divLabel = state.division === 'blue' ? 'División Azul (7–9)' : 'División Oro (10–12)';
+      const modeLabel = state.practiceMode === 'full'
+        ? 'Simulación Completa'
+        : state.practiceMode === 'recite'
+          ? 'Solo Recitación'
+          : 'Solo Preguntas';
+      const memLabel = state.memoryMode ? 'Modo Oficial (De Memoria)' : 'Modo Práctica (Con Texto)';
+      document.getElementById('setupSummaryText').textContent = `${divLabel} • ${modeLabel} • ${memLabel}`;
+    }
+
+    async function toggleMicTest() {
+      if (state.micTesting) {
+        stopMicTest();
+        return;
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        state.micStream = stream;
+        state.micTesting = true;
+        document.getElementById('testMicBtnLabel').textContent = 'Detener Prueba / Stop Test';
+        document.getElementById('micStatusText').textContent = 'Activo / Listening...';
+        document.getElementById('micStatusText').className = 'text-emerald-600 font-bold';
+        document.getElementById('micTestOutputBox').classList.remove('hidden');
+
+        // Web Audio API volume meter
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        state.audioCtx = new AudioContext();
+        const source = state.audioCtx.createMediaStreamSource(stream);
+        const analyser = state.audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        source.connect(analyser);
+        const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+        function updateMeter() {
+          if (!state.micTesting) return;
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+          const avg = sum / dataArray.length;
+          const pct = Math.min(100, Math.round((avg / 90) * 100));
+          document.getElementById('micLevelBar').style.width = `${pct}%`;
+          state.micAnimFrame = requestAnimationFrame(updateMeter);
+        }
+        updateMeter();
+
+        // Spanish Speech Recognition test
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+          const recog = new SpeechRecognition();
+          recog.lang = 'es-MX';
+          recog.continuous = true;
+          recog.interimResults = true;
+          recog.onresult = (event) => {
+            let txt = '';
+            for (let i = 0; i < event.results.length; i++) {
+              txt += event.results[i][0].transcript + ' ';
+            }
+            document.getElementById('micTestTranscript').textContent = txt.trim() || 'Escuchando...';
+          };
+          recog.onerror = () => {};
+          recog.start();
+          state.testRecognition = recog;
+        } else {
+          document.getElementById('micTestTranscript').textContent =
+            'Micrófono activo (el reconocimiento de voz automático requiere Chrome/Edge; puedes escribir o editar el texto manualmente).';
+        }
+      } catch (err) {
+        showToast(
+          'Permiso de Micrófono / Mic Access',
+          'No se pudo acceder al micrófono. Verifica los permisos de tu navegador o escribe tu texto directamente.'
+        );
+      }
+    }
+
+    function stopMicTest() {
+      state.micTesting = false;
+      document.getElementById('testMicBtnLabel').textContent = 'Probar Micrófono y Voz';
+      document.getElementById('micStatusText').textContent = 'Inactivo / Idle';
+      document.getElementById('micStatusText').className = 'text-slate-500';
+      document.getElementById('micLevelBar').style.width = '0%';
+      if (state.micAnimFrame) cancelAnimationFrame(state.micAnimFrame);
+      if (state.micStream) {
+        state.micStream.getTracks().forEach(t => t.stop());
+        state.micStream = null;
+      }
+      if (state.audioCtx) {
+        state.audioCtx.close().catch(() => {});
+        state.audioCtx = null;
+      }
+      if (state.testRecognition) {
+        try { state.testRecognition.stop(); } catch (e) {}
+        state.testRecognition = null;
+      }
+    }
+
+    function speakSpanishText(text, onStartCb, onEndCb) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Voz no disponible', 'Tu navegador no soporta síntesis de voz Web Speech.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      const voices = window.speechSynthesis.getVoices();
+      const spanishVoice =
+        voices.find(v => v.lang === 'es-MX') ||
+        voices.find(v => v.lang === 'es-US') ||
+        voices.find(v => v.lang && v.lang.toLowerCase().startsWith('es'));
+      if (spanishVoice) utter.voice = spanishVoice;
+      utter.lang = spanishVoice ? spanishVoice.lang : 'es-MX';
+      utter.rate = 0.96;
+      utter.pitch = 1.02;
+      if (onStartCb) utter.onstart = onStartCb;
+      if (onEndCb) utter.onend = onEndCb;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function testSpanishJudgeVoice() {
+      speakSpanishText(
+        'Buenos días. Bienvenido al concurso de El Credo de la FFA de California. Cuando estés listo, puedes comenzar.'
+      );
+      showToast('Voz del Juez / Judge Voice', 'Reproduciendo saludo oficial en español...');
+    }
+
+    function startSimulation() {
+      stopMicTest();
+      state.contestantName = document.getElementById('contestantName').value.trim() || 'Concursante FFA';
+      state.speakerNumber = parseInt(document.getElementById('speakerNumber').value, 10) || 1;
+
+      // Reset round metrics
+      resetRecitation();
+      state.qaAnswers = ['', '', ''];
+      state.qaSeconds = 0;
+      pickThreeRandomQuestions();
+
+      if (state.practiceMode === 'qa') {
+        navigateStage(3);
+      } else {
+        navigateStage(2);
+      }
+    }
+
+    // =========================================================================
+    // 7. STAGE 2: EL CREDO RECITATION, 4:00 TIMER, PROMPTER & LCS ACCURACY
+    // =========================================================================
+    function renderOfficialScript() {
+      const container = document.getElementById('officialScriptContainer');
+      container.innerHTML = OFFICIAL_CREED_SECTIONS.map(sec => {
+        const isMeta = sec.id === 'opening' || sec.id === 'closing';
+        return `
+          <div class="p-3.5 rounded-xl ${isMeta ? 'bg-ffaGoldSoft/60 border border-ffaGold' : 'bg-slate-50 border border-slate-200'}">
+            <div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-ffaNavy mb-1">
+              <span>${sec.labelEs}</span>
+              <span class="text-slate-500 font-semibold en-sub">${sec.labelEn}</span>
+            </div>
+            <div class="grid grid-cols-1 ${state.showSideBySideEn ? 'md:grid-cols-2 gap-4' : ''}">
+              <p class="creed-serif text-slate-900 ${isMeta ? 'font-bold text-ffaNavy' : ''}">
+                ${sec.es}
+              </p>
+              ${state.showSideBySideEn ? `
+                <p class="text-xs sm:text-sm text-slate-600 italic border-t md:border-t-0 md:border-l border-slate-300 pt-2 md:pt-0 md:pl-3">
+                  ${sec.en}
+                </p>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleCreedEnglishSideBySide() {
+      state.showSideBySideEn = !state.showSideBySideEn;
+      document.getElementById('sideBySideBtnLabel').textContent = state.showSideBySideEn
+        ? 'Ocultar Traducción al Inglés / Hide English Meaning'
+        : 'Mostrar Traducción al Inglés / Show English Meaning';
+      renderOfficialScript();
+    }
+
+    function applyMemoryModeUI() {
+      const mask = document.getElementById('memoryModeMask');
+      const scriptBox = document.getElementById('officialScriptContainer');
+      const sideBtn = document.getElementById('toggleSideBySideEnBtn');
+      const sub = document.getElementById('scriptModeSubtitle');
+
+      if (state.memoryMode) {
+        mask.classList.remove('hidden');
+        scriptBox.classList.add('hidden');
+        sideBtn.classList.add('hidden');
+        sub.textContent = 'Official Memory Mode active — Text hidden during recitation.';
+      } else {
+        mask.classList.add('hidden');
+        scriptBox.classList.remove('hidden');
+        sideBtn.classList.remove('hidden');
+        sub.textContent = 'Practice Mode active — Toggle English meaning side-by-side if needed.';
+      }
+    }
+
+    function formatMMSS(totalSec) {
+      const mins = Math.floor(totalSec / 60);
+      const secs = totalSec % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function startRecitation() {
+      if (state.reciteRunning) return;
+      state.reciteRunning = true;
+      state.lastSpeechTimestamp = Date.now();
+      document.getElementById('startReciteBtn').disabled = true;
+      document.getElementById('stopReciteBtn').disabled = false;
+      document.getElementById('reciteLiveBadge').classList.remove('hidden');
+      document.getElementById('pauseAlertBanner').classList.add('hidden');
+
+      // Start 4:00 (240s) count-up timer
+      state.reciteTimerInterval = setInterval(() => {
+        state.reciteSeconds++;
+        updateReciteTimerUI();
+      }, 1000);
+
+      // Monitor 10-second speech pause for Prompter alert
+      state.pauseMonitorInterval = setInterval(() => {
+        if (!state.reciteRunning) return;
+        const idleMs = Date.now() - state.lastSpeechTimestamp;
+        if (idleMs >= 10000) {
+          document.getElementById('pauseAlertBanner').classList.remove('hidden');
+        }
+      }, 1000);
+
+      // Start Spanish Speech-to-Text
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recog = new SpeechRecognition();
+        recog.lang = 'es-MX';
+        recog.continuous = true;
+        recog.interimResults = true;
+
+        recog.onresult = (event) => {
+          state.lastSpeechTimestamp = Date.now();
+          document.getElementById('pauseAlertBanner').classList.add('hidden');
+
+          let interim = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              state.reciteFinalTranscript += transcript + ' ';
+            } else {
+              interim += transcript;
+            }
+          }
+          const combined = (state.reciteFinalTranscript + interim).trim();
+          const box = document.getElementById('reciteTranscriptInput');
+          box.value = combined;
+          document.getElementById('spokenWordCount').textContent = tokenizeWords(combined).length;
+        };
+
+        recog.onerror = (e) => {
+          if (e.error === 'not-allowed') {
+            showToast('Micrófono bloqueado', 'Permite el acceso al micrófono o escribe el texto en el cuadro.');
+          }
+        };
+
+        recog.onend = () => {
+          // Auto-restart if still in active recitation
+          if (state.reciteRunning) {
+            try { recog.start(); } catch (err) {}
+          }
+        };
+
+        try {
+          recog.start();
+          state.reciteRecognition = recog;
+        } catch (err) {}
+      } else {
+        showToast(
+          'Reconocimiento de Voz',
+          'Tu navegador no soporta captura de voz automática. El cronómetro está activo y puedes pegar o escribir tu recitación.'
+        );
+      }
+    }
+
+    function stopRecitation(silent = false) {
+      state.reciteRunning = false;
+      clearInterval(state.reciteTimerInterval);
+      clearInterval(state.pauseMonitorInterval);
+      document.getElementById('startReciteBtn').disabled = false;
+      document.getElementById('stopReciteBtn').disabled = true;
+      document.getElementById('reciteLiveBadge').classList.add('hidden');
+      document.getElementById('pauseAlertBanner').classList.add('hidden');
+
+      if (state.reciteRecognition) {
+        try { state.reciteRecognition.stop(); } catch (e) {}
+        state.reciteRecognition = null;
+      }
+      if (!silent) {
+        evaluateRecitationAndProceed();
+      }
+    }
+
+    function resetRecitation() {
+      stopRecitation(true);
+      state.reciteSeconds = 0;
+      state.reciteFinalTranscript = '';
+      state.reciteInterimTranscript = '';
+      state.accuracyErrors = 0;
+      state.accuracyDiffTokens = [];
+      document.getElementById('reciteTranscriptInput').value = '';
+      document.getElementById('spokenWordCount').textContent = '0';
+      document.getElementById('accuracyResultCard').classList.add('hidden');
+      document.getElementById('prompterOutputBox').classList.add('hidden');
+      updateReciteTimerUI();
+    }
+
+    function updateReciteTimerUI() {
+      const display = document.getElementById('reciteTimerDisplay');
+      const badge = document.getElementById('reciteOvertimeBadge');
+      const dedText = document.getElementById('reciteDeductionPreview');
+      const card = document.getElementById('reciteTimerCard');
+
+      display.textContent = formatMMSS(state.reciteSeconds);
+
+      if (state.reciteSeconds <= 210) {
+        display.className = 'text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-ffaGold';
+        badge.textContent = 'En Tiempo / On Pace';
+        badge.className = 'font-bold text-emerald-400';
+        dedText.textContent = 'Penalización: 0 pts';
+        card.className = 'flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-slate-900 text-white border-2 border-slate-700';
+      } else if (state.reciteSeconds <= 240) {
+        display.className = 'text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-amber-400';
+        badge.textContent = 'Últimos 30s / Warning';
+        badge.className = 'font-bold text-amber-400';
+        dedText.textContent = 'Penalización: 0 pts';
+        card.className = 'flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-slate-900 text-white border-2 border-amber-500';
+      } else {
+        const over = state.reciteSeconds - 240;
+        display.className = 'text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-rose-400';
+        badge.textContent = `Tiempo Excedido (+${over}s)`;
+        badge.className = 'font-bold text-rose-400';
+        dedText.textContent = `Penalización: -${over} pts`;
+        card.className = 'flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-rose-950 text-white border-2 border-rose-500';
+      }
+    }
+
+    // 10-Second Prompter ("Apuntador"): finds next 4 words based on current spoken progress
+    function triggerPrompter() {
+      const expectedWords = tokenizeWords(FULL_OFFICIAL_SPANISH_TEXT);
+      const spokenWords = tokenizeWords(document.getElementById('reciteTranscriptInput').value);
+
+      // Estimate current index by matching last few spoken words or using length
+      let nextIdx = Math.min(spokenWords.length, expectedWords.length - 1);
+      if (spokenWords.length >= 2) {
+        const tail = spokenWords.slice(-2).join(' ');
+        for (let i = Math.max(0, spokenWords.length - 15); i < expectedWords.length - 1; i++) {
+          if (`${expectedWords[i]} ${expectedWords[i + 1]}` === tail) {
+            nextIdx = i + 2;
+            break;
+          }
+        }
+      }
+
+      const nextFour = expectedWords.slice(nextIdx, nextIdx + 4).join(' ');
+      const promptPhrase = nextFour || 'esta inspiradora tarea. Gracias';
+
+      document.getElementById('prompterWordsText').textContent = `"${promptPhrase}"`;
+      document.getElementById('prompterOutputBox').classList.remove('hidden');
+      document.getElementById('pauseAlertBanner').classList.add('hidden');
+      state.lastSpeechTimestamp = Date.now();
+
+      speakSpanishText(promptPhrase);
+    }
+
+    function loadSamplePerfectTranscript() {
+      document.getElementById('reciteTranscriptInput').value = FULL_OFFICIAL_SPANISH_TEXT;
+      document.getElementById('spokenWordCount').textContent = tokenizeWords(FULL_OFFICIAL_SPANISH_TEXT).length;
+      if (state.reciteSeconds === 0) {
+        state.reciteSeconds = 198; // 3:18 realistic winning pace
+        updateReciteTimerUI();
+      }
+      showToast('Texto Cargado', 'Se cargó el texto oficial completo de El Credo de la FFA.');
+    }
+
+    // Normalize Spanish tokens for LCS comparison (ignore punctuation/case, preserve Spanish letters)
+    function tokenizeWords(text) {
+      if (!text) return [];
+      return text
+        .toLowerCase()
+        .replace(/[—–\-.,;:¡!¿?"'“”()]/g, ' ')
+        .split(/\s+/)
+        .map(w => w.trim())
+        .filter(Boolean);
+    }
+
+    function displayWordsOriginal(text) {
+      if (!text) return [];
+      return text
+        .replace(/[—–]/g, ' ')
+        .split(/\s+/)
+        .map(w => w.trim())
+        .filter(Boolean);
+    }
+
+    // LCS Word-by-Word Accuracy Judge Engine
+    function computeWordDiffLCS(expectedNorm, expectedDisplay, spokenNorm, spokenDisplay) {
+      const m = expectedNorm.length;
+      const n = spokenNorm.length;
+
+      // DP table for Longest Common Subsequence
+      const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          if (expectedNorm[i - 1] === spokenNorm[j - 1]) {
+            dp[i][j] = dp[i - 1][j - 1] + 1;
+          } else {
+            dp[i][j] = dp[i - 1][j] >= dp[i][j - 1] ? dp[i - 1][j] : dp[i][j - 1];
+          }
+        }
+      }
+
+      // Backtrack to construct diff tokens
+      const tokens = [];
+      let i = m;
+      let j = n;
+      let errors = 0;
+
+      while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && expectedNorm[i - 1] === spokenNorm[j - 1]) {
+          tokens.push({ type: 'match', text: expectedDisplay[i - 1] });
+          i--;
+          j--;
+        } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+          tokens.push({ type: 'extra', text: spokenDisplay[j - 1] });
+          errors++;
+          j--;
+        } else if (i > 0) {
+          tokens.push({ type: 'missed', text: expectedDisplay[i - 1] });
+          errors++;
+          i--;
+        }
+      }
+
+      tokens.reverse();
+      return { tokens, errors };
+    }
+
+    function evaluateRecitationAndProceed() {
+      if (state.reciteRunning) {
+        stopRecitation(true);
+      }
+
+      const spokenRaw = document.getElementById('reciteTranscriptInput').value.trim();
+      const expectedNorm = tokenizeWords(FULL_OFFICIAL_SPANISH_TEXT);
+      const expectedDisplay = displayWordsOriginal(FULL_OFFICIAL_SPANISH_TEXT);
+      const spokenNorm = tokenizeWords(spokenRaw);
+      const spokenDisplay = displayWordsOriginal(spokenRaw);
+
+      const { tokens, errors } = computeWordDiffLCS(
+        expectedNorm,
+        expectedDisplay,
+        spokenNorm,
+        spokenDisplay
+      );
+
+      state.accuracyErrors = errors;
+      state.accuracyDiffTokens = tokens;
+      const deduction = errors * 2;
+
+      document.getElementById('accuracyDeductionBadge').textContent = `-${deduction} pts`;
+      document.getElementById('accuracyErrorSummary').textContent =
+        `${errors} error${errors === 1 ? '' : 'es'} × 2 pts`;
+
+      const diffHtml = tokens.map(t => {
+        if (t.type === 'match') {
+          return `<span class="px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 font-medium">${escapeHtml(t.text)}</span>`;
+        }
+        if (t.type === 'missed') {
+          return `<span class="px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 line-through font-semibold" title="Omitida / Missed">${escapeHtml(t.text)}</span>`;
+        }
+        return `<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 font-semibold" title="Extra / Switched">+${escapeHtml(t.text)}</span>`;
+      }).join('');
+
+      document.getElementById('accuracyDiffContainer').innerHTML = diffHtml;
+      document.getElementById('accuracyResultCard').classList.remove('hidden');
+
+      // Update next button label based on mode
+      if (state.practiceMode === 'recite') {
+        document.getElementById('afterReciteNextLabel').textContent = 'Ver Boleta Oficial (100 Pts) →';
+        document.getElementById('afterReciteNextSub').textContent = 'View Official 100-Point Scorecard';
+      } else {
+        document.getElementById('afterReciteNextLabel').textContent = 'Continuar a Ronda de Preguntas (3 Jueces) →';
+        document.getElementById('afterReciteNextSub').textContent = 'Proceed to 3-Judge Spanish Q&A Stage';
+      }
+
+      // Auto-estimate Pace rubric score (1-5) from WPM
+      if (state.reciteSeconds > 0 && spokenNorm.length > 50) {
+        const wpm = Math.round((spokenNorm.length / state.reciteSeconds) * 60);
+        const paceItem = RUBRIC_ITEMS.oral.find(item => item.id === 'pace');
+        if (paceItem) {
+          if (wpm >= 115 && wpm <= 145) paceItem.score = 5;
+          else if (wpm >= 100 && wpm <= 160) paceItem.score = 4;
+          else paceItem.score = 3;
+        }
+      }
+    }
+
+    function proceedAfterRecitation() {
+      if (state.practiceMode === 'recite') {
+        navigateStage(4);
+      } else {
+        navigateStage(3);
+      }
+    }
+
+    // =========================================================================
+    // 8. STAGE 3: 3-JUDGE SPANISH Q&A STAGE (5:00 LIMIT)
+    // =========================================================================
+    function pickThreeRandomQuestions() {
+      // Pick 3 questions from distinct paragraphs for balanced coverage
+      const paragraphs = [1, 2, 3, 4, 5].sort(() => Math.random() - 0.5).slice(0, 3).sort();
+      state.selectedQuestions = paragraphs.map(pNum => {
+        const pool = QUESTION_BANK.filter(q => q.paragraph === pNum);
+        return pool[Math.floor(Math.random() * pool.length)];
+      });
+      state.currentQIdx = 0;
+    }
+
+    function startQaTimer() {
+      clearInterval(state.qaTimerInterval);
+      updateQaTimerUI();
+      state.qaTimerInterval = setInterval(() => {
+        state.qaSeconds++;
+        updateQaTimerUI();
+      }, 1000);
+    }
+
+    function stopQaTimer() {
+      clearInterval(state.qaTimerInterval);
+    }
+
+    function updateQaTimerUI() {
+      const display = document.getElementById('qaTimerDisplay');
+      const badge = document.getElementById('qaOvertimeBadge');
+      const dedText = document.getElementById('qaDeductionPreview');
+      const card = document.getElementById('qaTimerCard');
+
+      display.textContent = formatMMSS(state.qaSeconds);
+
+      if (state.qaSeconds <= 270) {
+        display.className = 'text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-ffaGold';
+        badge.textContent = 'En Tiempo / On Pace';
+        badge.className = 'font-bold text-emerald-400';
+        dedText.textContent = 'Penalización: 0 pts';
+        card.className = 'flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-slate-900 text-white border-2 border-slate-700';
+      } else if (state.qaSeconds <= 300) {
+        display.className = 'text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-amber-400';
+        badge.textContent = 'Últimos 30s / Warning';
+        badge.className = 'font-bold text-amber-400';
+        dedText.textContent = 'Penalización: 0 pts';
+        card.className = 'flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-slate-900 text-white border-2 border-amber-500';
+      } else {
+        const over = state.qaSeconds - 300;
+        display.className = 'text-2xl sm:text-3xl font-mono font-extrabold tracking-tight text-rose-400';
+        badge.textContent = `Tiempo Excedido (+${over}s)`;
+        badge.className = 'font-bold text-rose-400';
+        dedText.textContent = `Penalización: -${over} pts`;
+        card.className = 'flex items-center gap-4 px-4 py-2.5 rounded-2xl bg-rose-950 text-white border-2 border-rose-500';
+      }
+    }
+
+    function renderCurrentQuestion() {
+      const idx = state.currentQIdx;
+      const q = state.selectedQuestions[idx];
+      const judge = JUDGES[idx];
+
+      // Highlight active judge card
+      [0, 1, 2].forEach(j => {
+        const card = document.getElementById(`judgeCard${j}`);
+        const dot = document.getElementById(`qDot${j}`);
+        if (j === idx) {
+          card.className = 'judge-panel-card p-4 rounded-2xl border-2 border-ffaNavy bg-blue-50/70 transition shadow-xs';
+          dot.className = 'w-8 h-8 rounded-full font-bold text-xs bg-ffaNavy text-ffaGold cursor-pointer';
+        } else {
+          card.className = 'judge-panel-card p-4 rounded-2xl border-2 border-slate-200 bg-white transition';
+          dot.className = 'w-8 h-8 rounded-full font-bold text-xs bg-slate-200 text-slate-700 cursor-pointer';
+        }
+      });
+
+      document.getElementById('currentQBadge').textContent = `Pregunta ${idx + 1} de 3`;
+      document.getElementById('currentQParagraphTag').textContent = `Párrafo ${q.paragraph}`;
+      document.getElementById('askingJudgeLabel').textContent = `${judge.name} pregunta:`;
+      document.getElementById('currentQuestionEs').textContent = q.es;
+      document.getElementById('currentQuestionEn').textContent = q.en;
+      document.getElementById('answerJudgeNum').textContent = idx + 1;
+
+      const ansBox = document.getElementById('qaAnswerInput');
+      ansBox.value = state.qaAnswers[idx] || '';
+      document.getElementById('qaCurrentWordCount').textContent = tokenizeWords(ansBox.value).length;
+
+      document.getElementById('prevQBtn').disabled = idx === 0;
+      document.getElementById('nextQBtn').disabled = idx === 2;
+    }
+
+    function switchQuestionIndex(newIdx) {
+      if (newIdx < 0 || newIdx > 2) return;
+      stopQaSpeechRecognition();
+      state.currentQIdx = newIdx;
+      renderCurrentQuestion();
+    }
+
+    function speakCurrentQuestion() {
+      const idx = state.currentQIdx;
+      const q = state.selectedQuestions[idx];
+      const ring = document.getElementById(`judgeRing${idx}`);
+      speakSpanishText(
+        q.es,
+        () => { if (ring) ring.classList.remove('hidden'); },
+        () => { if (ring) ring.classList.add('hidden'); }
+      );
+    }
+
+    function swapCurrentQuestion() {
+      const idx = state.currentQIdx;
+      const current = state.selectedQuestions[idx];
+      const usedIds = new Set(state.selectedQuestions.map(item => item.id));
+      const candidates = QUESTION_BANK.filter(q => !usedIds.has(q.id));
+      if (candidates.length > 0) {
+        const replacement = candidates[Math.floor(Math.random() * candidates.length)];
+        state.selectedQuestions[idx] = replacement;
+        state.qaAnswers[idx] = '';
+        renderCurrentQuestion();
+        speakCurrentQuestion();
+      }
+    }
+
+    function saveCurrentAnswerText(val) {
+      state.qaAnswers[state.currentQIdx] = val;
+      document.getElementById('qaCurrentWordCount').textContent = tokenizeWords(val).length;
+    }
+
+    function toggleQaSpeechRecognition() {
+      if (state.qaRecognizing) {
+        stopQaSpeechRecognition();
+        return;
+      }
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showToast('Dictado no soportado', 'Escribe tu respuesta en español directamente en el cuadro de texto.');
+        return;
+      }
+
+      const recog = new SpeechRecognition();
+      recog.lang = 'es-MX';
+      recog.continuous = true;
+      recog.interimResults = true;
+
+      const idx = state.currentQIdx;
+      let baseText = state.qaAnswers[idx] ? state.qaAnswers[idx].trim() + ' ' : '';
+
+      recog.onstart = () => {
+        state.qaRecognizing = true;
+        document.getElementById('qaMicBtnText').textContent = '⏹ Detener Voz / Stop Mic';
+        document.getElementById('toggleQaMicBtn').className =
+          'px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer animate-pulse';
+      };
+
+      recog.onresult = (event) => {
+        let sessionTxt = '';
+        for (let i = 0; i < event.results.length; i++) {
+          sessionTxt += event.results[i][0].transcript;
+        }
+        const full = (baseText + sessionTxt).trim();
+        state.qaAnswers[idx] = full;
+        const box = document.getElementById('qaAnswerInput');
+        box.value = full;
+        document.getElementById('qaCurrentWordCount').textContent = tokenizeWords(full).length;
+      };
+
+      recog.onend = () => {
+        stopQaSpeechRecognition();
+      };
+
+      recog.onerror = () => {
+        stopQaSpeechRecognition();
+      };
+
+      try {
+        recog.start();
+        state.qaRecognition = recog;
+      } catch (e) {}
+    }
+
+    function stopQaSpeechRecognition() {
+      state.qaRecognizing = false;
+      document.getElementById('qaMicBtnText').textContent = '🎙️ Responder con Voz / Speak Answer';
+      document.getElementById('toggleQaMicBtn').className =
+        'px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm cursor-pointer';
+      if (state.qaRecognition) {
+        try { state.qaRecognition.stop(); } catch (e) {}
+        state.qaRecognition = null;
+      }
+    }
+
+    function finishQaAndGenerateScorecard() {
+      stopQaTimer();
+      stopQaSpeechRecognition();
+
+      // Auto-estimate Q&A rubric scores based on student answer depth & Creed/Ag references
+      const allAnswers = state.qaAnswers.join(' ').toLowerCase();
+      const totalQaWords = tokenizeWords(allAnswers).length;
+
+      if (totalQaWords > 0) {
+        const hasCreedRef = /(credo|párrafo|agricultura|hechos|liderazgo|negociación|tradiciones|finca)/i.test(allAnswers);
+        const hasExampleRef = /(sae|proyecto|ejemplo|capítulo|clase|animales|plantas|comunidad|california)/i.test(allAnswers);
+
+        const respItem = RUBRIC_ITEMS.qa.find(i => i.id === 'response');
+        const suppItem = RUBRIC_ITEMS.qa.find(i => i.id === 'support');
+        const knowItem = RUBRIC_ITEMS.qa.find(i => i.id === 'knowledge');
+
+        if (respItem) respItem.score = totalQaWords >= 75 ? 5 : totalQaWords >= 35 ? 4 : 3;
+        if (suppItem) suppItem.score = (hasCreedRef && hasExampleRef) ? 5 : (hasCreedRef || hasExampleRef) ? 4 : 3;
+        if (knowItem) knowItem.score = totalQaWords >= 60 ? 5 : totalQaWords >= 25 ? 4 : 3;
+      }
+
+      navigateStage(4);
+    }
+
+    // =========================================================================
+    // 9. STAGE 4: 100-POINT RUBRIC SCORECARD, FILLER WORDS & MODEL ANSWERS
+    // =========================================================================
+    function renderRubricSliders() {
+      renderRubricCategory('oral', 'oralRubricRows');
+      renderRubricCategory('nonVerbal', 'nonVerbalRubricRows');
+      renderRubricCategory('qa', 'qaRubricRows');
+    }
+
+    function renderRubricCategory(catKey, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = RUBRIC_ITEMS[catKey].map(item => {
+        const maxPts = 5 * item.multiplier;
+        const earned = item.score * item.multiplier;
+        return `
+          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <div class="font-bold text-sm text-slate-900">
+                  ${item.titleEs}
+                  <span class="text-xs font-normal text-slate-500 en-sub">/ ${item.titleEn}</span>
+                </div>
+                <p class="text-xs text-slate-600 mt-0.5">
+                  ${item.descEs}
+                  <span class="block text-slate-500 en-sub">${item.descEn}</span>
+                </p>
+              </div>
+              <div class="text-right shrink-0">
+                <span id="pts_${item.id}" class="text-base font-extrabold text-ffaNavy">${earned}</span>
+                <span class="text-xs font-bold text-slate-500">/ ${maxPts} pts</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 pt-1">
+              <span class="text-[11px] font-bold text-slate-500">0</span>
+              <input type="range" min="0" max="5" step="1" value="${item.score}"
+                oninput="updateRubricScore('${catKey}', '${item.id}', this.value)"
+                class="flex-1 accent-[#003366] cursor-pointer" />
+              <span class="text-[11px] font-bold text-slate-500">5</span>
+              <span id="raw_${item.id}" class="px-2 py-0.5 rounded bg-ffaNavy text-ffaGold text-xs font-bold">
+                ${item.score} × ${item.multiplier}
+              </span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateRubricScore(catKey, itemId, val) {
+      const numVal = parseInt(val, 10);
+      const item = RUBRIC_ITEMS[catKey].find(i => i.id === itemId);
+      if (!item) return;
+      item.score = numVal;
+      document.getElementById(`pts_${itemId}`).textContent = numVal * item.multiplier;
+      document.getElementById(`raw_${itemId}`).textContent = `${numVal} × ${item.multiplier}`;
+      recalculateTotalScorecard();
+    }
+
+    function recalculateTotalScorecard() {
+      const oralSum = RUBRIC_ITEMS.oral.reduce((acc, i) => acc + i.score * i.multiplier, 0);
+      const nonVerbalSum = RUBRIC_ITEMS.nonVerbal.reduce((acc, i) => acc + i.score * i.multiplier, 0);
+      const qaSum = RUBRIC_ITEMS.qa.reduce((acc, i) => acc + i.score * i.multiplier, 0);
+
+      document.getElementById('oralCatTotal').textContent = oralSum;
+      document.getElementById('nonVerbalCatTotal').textContent = nonVerbalSum;
+      document.getElementById('qaCatTotal').textContent = qaSum;
+
+      const grossTotal = oralSum + nonVerbalSum + qaSum;
+      const reciteOvertimeDed = state.reciteSeconds > 240 ? (state.reciteSeconds - 240) : 0;
+      const qaOvertimeDed = state.qaSeconds > 300 ? (state.qaSeconds - 300) : 0;
+      const accuracyDed = state.accuracyErrors * 2;
+
+      const totalDeductions = reciteOvertimeDed + qaOvertimeDed + accuracyDed;
+      const netTotal = Math.max(0, grossTotal - totalDeductions);
+
+      document.getElementById('netTotalScoreDisplay').innerHTML =
+        `${netTotal} <span class="text-base font-normal text-blue-200">/ 100</span>`;
+      document.getElementById('grossAndDeductionsText').textContent =
+        `Bruto: ${grossTotal} | Deducciones: -${totalDeductions}`;
+
+      document.getElementById('summaryGrossPts').textContent = `${grossTotal} pts`;
+      document.getElementById('summaryReciteTimeDetail').textContent =
+        `${formatMMSS(state.reciteSeconds)} (Límite 4:00 • -1 pt/seg)`;
+      document.getElementById('summaryReciteTimeDed').textContent = `-${reciteOvertimeDed} pts`;
+
+      document.getElementById('summaryQaTimeDetail').textContent =
+        `${formatMMSS(state.qaSeconds)} (Límite 5:00 • -1 pt/seg)`;
+      document.getElementById('summaryQaTimeDed').textContent = `-${qaOvertimeDed} pts`;
+
+      document.getElementById('summaryAccuracyDetail').textContent =
+        `${state.accuracyErrors} error${state.accuracyErrors === 1 ? '' : 'es'} × 2 pts`;
+      document.getElementById('summaryAccuracyDed').textContent = `-${accuracyDed} pts`;
+
+      document.getElementById('summaryNetPts').textContent = `${netTotal} / 100`;
+    }
+
+    function generateScorecardReport() {
+      renderRubricSliders();
+      recalculateTotalScorecard();
+
+      // Contestant metadata
+      document.getElementById('reportName').textContent = state.contestantName || 'Concursante FFA';
+      document.getElementById('reportSpeakerNum').textContent = `#${state.speakerNumber}`;
+      document.getElementById('reportDivisionBadge').textContent =
+        state.division === 'blue' ? 'División Azul (7–9)' : 'División Oro (10–12)';
+
+      // WPM & Spanish Filler Word Analysis
+      const reciteRaw = document.getElementById('reciteTranscriptInput').value.trim();
+      const spokenWords = tokenizeWords(reciteRaw);
+      if (state.reciteSeconds > 0 && spokenWords.length > 0) {
+        const wpm = Math.round((spokenWords.length / state.reciteSeconds) * 60);
+        document.getElementById('wpmMetricDisplay').textContent = `${wpm} WPM`;
+        document.getElementById('wpmFeedbackLabel').textContent =
+          wpm >= 115 && wpm <= 145
+            ? 'Ritmo Óptimo / Optimal'
+            : wpm < 115
+              ? 'Un poco lento / Slightly slow'
+              : 'Un poco rápido / Slightly fast';
+      } else {
+        document.getElementById('wpmMetricDisplay').textContent = '-- WPM';
+      }
+
+      // Count Spanish filler words across recitation + Q&A
+      const combinedSpeech = `${reciteRaw} ${state.qaAnswers.join(' ')}`.toLowerCase();
+      const fillerPatterns = [
+        { label: 'este', regex: /\beste\b/g },
+        { label: 'eh', regex: /\beh+\b/g },
+        { label: 'o sea', regex: /\bo sea\b/g },
+        { label: 'pues', regex: /\bpues\b/g },
+        { label: 'como que', regex: /\bcomo que\b/g },
+        { label: 'bueno', regex: /\bbueno\b/g }
+      ];
+
+      let totalFillers = 0;
+      const foundList = [];
+      fillerPatterns.forEach(fp => {
+        const matches = combinedSpeech.match(fp.regex);
+        if (matches && matches.length > 0) {
+          totalFillers += matches.length;
+          foundList.push(`"${fp.label}" (${matches.length})`);
+        }
+      });
+
+      document.getElementById('fillerCountDisplay').textContent = totalFillers;
+      document.getElementById('fillerBreakdownBox').textContent = totalFillers > 0
+        ? `Muletillas detectadas / Detected fillers: ${foundList.join(', ')}. Consejo: Sustituye las muletillas por una pausa silenciosa de 1 segundo.`
+        : '¡Excelente control! No se detectaron muletillas ("este", "eh", "o sea", "pues", "como que", "bueno").';
+
+      // Detailed Accuracy Diff in Final Scorecard
+      const finalAccBox = document.getElementById('finalReportAccuracyBox');
+      if (state.accuracyDiffTokens && state.accuracyDiffTokens.length > 0) {
+        finalAccBox.innerHTML = state.accuracyDiffTokens.map(t => {
+          if (t.type === 'match') {
+            return `<span class="px-1 rounded bg-emerald-100 text-emerald-900">${escapeHtml(t.text)}</span>`;
+          }
+          if (t.type === 'missed') {
+            return `<span class="px-1 rounded bg-rose-100 text-rose-800 line-through font-bold">${escapeHtml(t.text)}</span>`;
+          }
+          return `<span class="px-1 rounded bg-amber-100 text-amber-900 font-bold">+${escapeHtml(t.text)}</span>`;
+        }).join('');
+      } else {
+        finalAccBox.innerHTML = '<span class="text-slate-500 italic">No se evaluó recitación en esta ronda.</span>';
+      }
+
+      // Render Tailored State-Winning Model Answers for the 3 Selected Questions
+      const modelContainer = document.getElementById('modelAnswersContainer');
+      modelContainer.innerHTML = state.selectedQuestions.map((q, idx) => {
+        const studentAns = state.qaAnswers[idx]?.trim();
+        const modelText = state.division === 'blue' ? q.modelEsBlue : q.modelEsGold;
+        const divTag = state.division === 'blue' ? 'División Azul (7–9)' : 'División Oro (10–12)';
+        return `
+          <div class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-ffaNavy text-ffaGold text-xs font-bold">
+                Pregunta ${idx + 1} • Párrafo ${q.paragraph}
+              </span>
+              <span class="text-xs font-bold text-slate-600">${JUDGES[idx].name}</span>
+            </div>
+
+            <div>
+              <div class="font-bold text-sm text-slate-900">${escapeHtml(q.es)}</div>
+              <div class="text-xs text-slate-500 en-sub mt-0.5">${escapeHtml(q.en)}</div>
+            </div>
+
+            ${studentAns ? `
+              <div class="p-3 rounded-xl bg-white border border-slate-200 text-xs">
+                <div class="font-bold text-slate-700 mb-1">Tu Respuesta / Your Response:</div>
+                <p class="text-slate-800 italic">"${escapeHtml(studentAns)}"</p>
+              </div>
+            ` : ''}
+
+            <div class="p-3.5 rounded-xl bg-ffaGoldSoft/70 border border-ffaGold text-xs space-y-1.5">
+              <div class="font-extrabold text-ffaNavy">
+                Respuesta Modelo Ganadora (${divTag}) <span class="font-normal text-slate-600 en-sub">/ State-Winning Model Answer</span>:
+              </div>
+              <p class="text-slate-900 leading-relaxed font-medium">
+                "${escapeHtml(modelText)}"
+              </p>
+              <p class="text-slate-600 italic pt-1 border-t border-ffaGold/50 en-sub">
+                English Summary: "${escapeHtml(q.modelEn)}"
+              </p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 10. 30-QUESTION BILINGUAL STUDY BANK MODAL
+    // =========================================================================
+    function openBankModal() {
+      document.getElementById('questionBankModal').classList.remove('hidden');
+    }
+
+    function closeBankModal() {
+      document.getElementById('questionBankModal').classList.add('hidden');
+    }
+
+    function filterBankParagraph(pNum) {
+      [0, 1, 2, 3, 4, 5].forEach(n => {
+        const tab = document.getElementById(`bankTab${n}`);
+        if (n === pNum) {
+          tab.className = 'bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-ffaNavy text-ffaGold cursor-pointer';
+        } else {
+          tab.className = 'bank-tab px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 hover:bg-slate-200 cursor-pointer';
+        }
+      });
+      renderQuestionBankList(pNum);
+    }
+
+    function renderQuestionBankList(pNum) {
+      const list = pNum === 0
+        ? QUESTION_BANK
+        : QUESTION_BANK.filter(q => q.paragraph === pNum);
+
+      const container = document.getElementById('bankListContainer');
+      container.innerHTML = list.map(q => {
+        const modelEs = state.division === 'blue' ? q.modelEsBlue : q.modelEsGold;
+        return `
+          <div class="bg-white rounded-xl border border-slate-200 p-4 space-y-2.5 shadow-2xs">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-ffaNavy text-ffaGold text-[11px] font-bold">
+                #${q.id} • Párrafo ${q.paragraph} / Paragraph ${q.paragraph}
+              </span>
+              <button type="button" onclick="speakSpanishText('${q.es.replace(/'/g, "\\'")}')"
+                class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-ffaNavy text-xs font-bold cursor-pointer">
+                🔊 Escuchar / Listen
+              </button>
+            </div>
+
+            <div>
+              <p class="font-bold text-sm text-slate-900">${escapeHtml(q.es)}</p>
+              <p class="text-xs text-slate-500 en-sub mt-0.5">${escapeHtml(q.en)}</p>
+            </div>
+
+            <details class="pt-1">
+              <summary class="text-xs font-bold text-ffaNavyLight hover:underline cursor-pointer">
+                Ver Respuesta Modelo Estatal <span class="en-sub font-normal">/ View State-Winning Model Answer</span>
+              </summary>
+              <div class="mt-2 p-3 rounded-xl bg-ffaGoldSoft/60 border border-ffaGold text-xs space-y-1">
+                <p class="text-slate-900 font-medium leading-relaxed">"${escapeHtml(modelEs)}"</p>
+                <p class="text-slate-600 italic en-sub pt-1 border-t border-ffaGold/40">"${escapeHtml(q.modelEn)}"</p>
+              </div>
+            </details>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>
